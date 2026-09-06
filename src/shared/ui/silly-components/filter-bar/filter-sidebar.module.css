@@ -1,0 +1,53 @@
+.filtersSidebar {
+    box-sizing: border-box;
+    padding: 20px 20px 40px 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: var(--color-bg-card);
+    overflow: visible;
+    width: 100%;
+    max-width: 280px;
+    flex-shrink: 0;
+}
+
+.filterGroup {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.radioItem span,
+.checkboxItem span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.filtersSidebar h3,
+.filtersSidebar h4 {
+    margin: 0;
+}
+
+.expandButton {
+    background: none;
+    border: none;
+    color: var(--color-accent);
+    text-align: left;
+    cursor: pointer;
+    padding: 0;
+}
+.reset {
+    color: var(--color-button-pressed);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.top {
+    display: flex;
+    justify-content: space-between;
+}

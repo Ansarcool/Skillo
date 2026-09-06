@@ -1,0 +1,122 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    top: 72px;
+    background-color: rgba(0, 0, 0, 0.25);
+    z-index: 90;
+}
+
+.menu {
+    background-color: var(--color-bg-card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+}
+
+.searchContainer {
+    width: 100%;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.navLink {
+    padding: 12px 4px;
+    text-decoration: none;
+    color: var(--color-text-main);
+    cursor: pointer;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.iconsRow {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.iconButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0;
+}
+
+.iconButton img {
+    width: 20px;
+    height: 20px;
+}
+
+.notificationsBadge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #e5484d;
+}
+
+.profileLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #253017;
+    padding: 8px 0;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.name {
+    color: var(--color-text-main);
+}
+
+.userAvatarPlaceholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-accent, #8bc34a);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.logoutButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #bf3920;
+    text-align: left;
+    padding: 8px 0;
+}
+
+.authButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.notificationsWrapper {
+    position: relative;
+}

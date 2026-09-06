@@ -1,0 +1,41 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.tab {
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.active {
+    color: var(--color-text-main);
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+}
+@media (max-width: 650px) {
+    .list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 450px) {
+    .list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

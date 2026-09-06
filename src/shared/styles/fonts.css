@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --font-jost: 'Jost', sans-serif;
+  --font-roboto: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--font-jost);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 40px;
+}
+
+h2 {
+  font-family: var(--font-jost);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h3 {
+  font-family: var(--font-jost);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+h4 {
+  font-family: var(--font-roboto);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.body {
+  font-family: var(--font-roboto);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.caption {
+  font-family: var(--font-roboto);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}

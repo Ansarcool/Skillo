@@ -1,0 +1,141 @@
+.wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    background-color: #ffffff;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.placeholder {
+    color: #9ca197;
+}
+
+.value {
+    color: #253017;
+}
+
+.calendarIcon {
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 16px;
+    z-index: 30;
+    width: 280px;
+    box-sizing: border-box;
+}
+
+.calendarHeader {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.monthSelect,
+.yearSelect {
+    flex: 1;
+    padding: 4px 8px;
+    border: none;
+    background-color: transparent;
+    font-family: var(--font-jost, inherit);
+    font-size: 16px;
+    font-weight: 500;
+    color: #253017;
+    cursor: pointer;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 8px;
+}
+
+.weekday {
+    text-align: center;
+    color: var(--color-accent, #8bc34a);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #253017;
+    font-size: 14px;
+}
+
+.day:hover {
+    background-color: #f3f4f6;
+}
+
+.dayMuted {
+    color: #cbd5c0;
+}
+
+.daySelected {
+    background-color: var(--color-accent, #8bc34a);
+    color: #ffffff;
+}
+
+.calendarActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.cancelButton {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--color-accent, #8bc34a);
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #253017;
+    cursor: pointer;
+}
+
+.confirmButton {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--color-accent, #8bc34a);
+    color: #ffffff;
+    cursor: pointer;
+}

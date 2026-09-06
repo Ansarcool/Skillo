@@ -1,0 +1,29 @@
+.pageLayout {
+    display: flex;
+    gap: 24px;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 32px 36px;
+    box-sizing: border-box;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.sidebarDesktop {
+    width: 280px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .pageLayout {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .sidebarDesktop {
+        display: none;
+    }
+}

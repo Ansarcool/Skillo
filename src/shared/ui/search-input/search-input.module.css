@@ -1,0 +1,42 @@
+.searchContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 527px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 8px 36px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    outline: none;
+    color: black;
+    font-size: 14px;
+    caret-color: #508826;
+}
+
+.clearIcon {
+    position: absolute;
+    right: 12px;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.clearIcon:hover {
+    opacity: 1;
+}

@@ -1,0 +1,44 @@
+:root {
+    --color-text-main: #253017;
+    --color-text-caption: #69735D;
+    --color-text-disabled: #9CA197;
+    --color-bg-main: #F9FAF7;
+    --color-bg-card: #FFFFFF;
+    --color-accent: #abd27a;
+    --color-button-hover: #DEEBC5;
+    --color-button-pressed: #508826;
+    --color-toggle: #B2B9A9;
+    --color-bg-disabled: #E4E8DF;
+
+    --color-sec-button: #FFFFFF;
+
+    --color-alarm: #E0796E;
+    --color-error: #BF3920;
+    --tag-business: #EEE7F7;
+    --tag-creative: #F7E7F2;
+    --tag-languages: #EBE5C5;
+    --tag-education: #E7F2F6;
+    --tag-home: #F7EBE5;
+    --tag-health: #E9F7E7;
+    --tag-plus: #E8ECF7;
+}
+[data-theme="dark"] {
+    --color-text-main: #ffffff;
+    --color-text-caption: #C7BE8E;
+    --color-text-disabled: #7C7658;
+
+    --color-bg-main: #242124;
+    --color-bg-card: #555555;
+
+    --color-accent: #E0C23E;
+    --color-button-hover: #4A4626;
+    --color-button-pressed: #C4A82E;
+    --color-toggle: #55512F;
+    --color-bg-disabled: #302E1E;
+
+    --color-sec-button: #26241A;
+
+    --color-alarm: #E0796E;
+    --color-error: #E5484D;
+
+}

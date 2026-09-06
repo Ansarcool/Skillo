@@ -1,0 +1,75 @@
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.inputLabel {
+    font-family: var(--font-family-base, sans-serif);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-main);
+}
+
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--font-roboto, sans-serif);
+    border: 1px solid #ccc;
+    border-radius: var(--radius-md, 8px);
+    background-color: #ffffff;
+    color: black;
+    outline: none;
+    transition: var(--transition-fast, 0.2s ease);
+}
+
+.input::placeholder {
+    color: var(--text-secondary);
+}
+
+.input:hover:not(:disabled) {
+    border-color: var(--color-button-pressed);
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
+}
+
+.input:focus {
+    border-color: var(--color-button-pressed);
+}
+
+.inputSizeSmall {
+}
+
+.inputSizeMedium {
+    padding: 10px 14px;
+    font-size: 14px;
+}
+
+.inputSizeLarge {
+}
+
+.inputStateError {
+    border-color: var(--color-error);
+}
+
+.inputStateError:hover:not(:disabled) {
+    border-color: var(--color-error);
+    background-color: var(--color-button-hover);
+}
+
+.inputStateError:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.inputErrorMessage {
+    font-size: 12px;
+    color: var(--color-error);
+}
+
+.input:disabled {
+    background-color: #f3f4f6;
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+}

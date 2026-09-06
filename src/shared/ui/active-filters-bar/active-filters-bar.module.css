@@ -1,0 +1,40 @@
+.activeFilters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px 0;
+}
+
+.count {
+    white-space: nowrap;
+}
+
+.reset {
+    background: none;
+    border: none;
+    color: var(--color-accent, #8bc34a);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 12px;
+    background-color: var(--color-bg-card);
+    color: var(--color-text-main);
+}
+
+.chipRemove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 0;
+}

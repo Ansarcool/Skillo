@@ -1,0 +1,73 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-bg-main, #f9faf7);
+    box-sizing: border-box;
+}
+
+.mainContainer {
+    display: grid;
+    grid-template-columns: 324px 1fr;
+    gap: 32px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 32px auto;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 40px 40px;
+    border: 1px solid #eaeaea;
+    height: fit-content;
+}
+
+.sideMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sideItem {
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #253017;
+    font-family: var(--font-roboto);
+    font-size: 16px;
+    transition: background-color 0.2s, font-weight 0.2s;
+}
+
+.sideItem:hover {
+    background-color: var(--color-button-hover);
+}
+
+.sideItemActive {
+    background-color: #e2ebd3;
+    font-weight: 500;
+}
+
+.contentCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 900px) {
+    .mainContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

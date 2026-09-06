@@ -1,0 +1,140 @@
+.panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 420px;
+  max-height: 520px;
+  overflow-y: auto;
+  background-color: var(--color-bg-card);
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  z-index: 50;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section + .section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eaeaea;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+}
+
+.sectionAction {
+  background: none;
+  border: none;
+  color: var(--color-accent, #8bc34a);
+  cursor: pointer;
+  padding: 0;
+}
+
+.empty {
+  color: #9ca3af;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itemRead {
+  opacity: 0.7;
+}
+
+.itemRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #1a1a1a;
+  margin-top: 2px;
+}
+
+.itemText {
+  flex: 1;
+  min-width: 0;
+}
+
+.itemText p {
+  margin: 0;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.date {
+  color: #9ca3af;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.goButton {
+  align-self: flex-start;
+  background-color: var(--color-accent, #8bc34a);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-left: 32px;
+}
+
+.goButton:hover {
+  opacity: 0.9;
+}
+
+.mobileOverlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileOverlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 9998;
+  }
+
+  .panel {
+    position: fixed;
+    top: 0;
+    left: 50px;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    padding: 20px;
+    overflow-y: auto;
+  }
+}

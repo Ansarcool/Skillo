@@ -1,0 +1,24 @@
+.modalOverride {
+    max-width: 420px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+}
+
+.title {
+    margin: 0;
+}
+
+.description {
+    color: #6b7280;
+    margin: 0 0 12px;
+}
+
+.button {
+    width: 100%;
+}
