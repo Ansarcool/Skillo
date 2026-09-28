@@ -1,5 +1,10 @@
-.modalOverride {
-    max-width: 420px;
+.modalExchange {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 556px;
+    max-height: 480px;
+    padding: 80px 60px;
 }
 
 .content {
@@ -7,23 +12,27 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 12px;
 }
 
 .icon {
-    color: #1a1a1a;
-    margin-bottom: 8px;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 52px;
 }
-
+.textColumn {
+    display: flex;
+    flex-direction: column;
+}
 .title {
-    margin: 0;
+    color: var(--color-text-main);
+    margin-bottom: 10px;
 }
 
 .description {
-    color: #6b7280;
-    margin: 0 0 12px;
+    color: var(--color-text-main);
 }
 
 .button {
+    margin-top: 32px;
     width: 100%;
 }

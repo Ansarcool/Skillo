@@ -18,9 +18,14 @@ import { SearchSelect } from '../../shared/ui/search-select/search-select.tsx';
 import { Select } from '../../shared/ui/select/select.tsx';
 import { DatePicker } from '../../shared/ui/date';
 
+import emailIcon from '../../../public/icons/request.svg';
+import heartIcon from '../../../public/icons/like.svg';
+import ideaIcon from '../../../public/icons/idea.svg';
+import userIcon from '../../../public/icons/user.svg';
+import messageIcon from '../../../public/icons/message-text.svg';
 import cameraIcon from '../../../public/icons/gallery-edit.svg';
 import editIcon from '../../../public/icons/edit.svg';
-import guestIcon from '../../../public/icons/user-circle.svg';
+import guestIcon from '../../../public/icons/nonAvatar.png';
 import styles from './profile.module.css';
 
 const CITIES = [
@@ -66,6 +71,7 @@ export const ProfilePage = () => {
   useEffect(() => {
     dispatch(getProfileThunk());
   }, [dispatch]);
+
   useEffect(() => {
     if (
       profile.name ||
@@ -117,23 +123,23 @@ export const ProfilePage = () => {
       <div className={styles.mainContainer}>
         <aside className={styles.sidebar}>
           <nav className={styles.sideMenu}>
-            <Link to='/requests' className={styles.sideItem}>
-              Заявки
+            <Link to='/requests' className={`body ${styles.sideItem}`}>
+              <img src={emailIcon} alt='' /> Заявки
             </Link>
-            <Link to='/exchanges' className={styles.sideItem}>
-              Мои обмены
+            <Link to='/exchanges' className={`body ${styles.sideItem}`}>
+              <img src={messageIcon} alt='' /> Мои обмены
             </Link>
-            <Link to='/favorites' className={styles.sideItem}>
-              Избранное
+            <Link to='/favorites' className={`body ${styles.sideItem}`}>
+              <img src={heartIcon} alt='' /> Избранное
             </Link>
-            <Link to='/my-skills' className={styles.sideItem}>
-              Мои навыки
+            <Link to='/my-skills' className={`body ${styles.sideItem}`}>
+              <img src={ideaIcon} alt='' /> Мои навыки
             </Link>
             <Link
               to='/profile'
-              className={`${styles.sideItem} ${styles.sideItemActive}`}
+              className={`body ${styles.sideItem} ${styles.sideItemActive}`}
             >
-              Личные данные
+              <img src={userIcon} alt='' /> Личные данные
             </Link>
           </nav>
         </aside>
@@ -144,129 +150,132 @@ export const ProfilePage = () => {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
-            <div className={styles.formGrid}>
-              <div className={styles.formFieldsColumn}>
-                <div className={styles.field}>
-                  <div className={styles.inputWithIcon}>
-                    <Input
-                      label='Почта'
-                      type='email'
-                      {...register('email')}
-                      error={errors.email?.message}
-                    />
-                    <img src={editIcon} className={styles.fieldIcon} alt='' />
-                  </div>
-                  <Link to='/change-password' className={styles.passwordLink}>
-                    Изменить пароль
-                  </Link>
-                </div>
+            <div className={styles.leftSection}>
+              <div className={styles.field}>
                 <div className={styles.inputWithIcon}>
                   <Input
-                    label='Имя'
-                    type='text'
-                    {...register('name')}
-                    error={errors.name?.message}
+                    label='Почта'
+                    type='email'
+                    size={'medium'}
+                    {...register('email')}
+                    error={errors.email?.message}
                   />
                   <img src={editIcon} className={styles.fieldIcon} alt='' />
                 </div>
+                <Link
+                  to='/change-password'
+                  className={`body ${styles.passwordLink}`}
+                >
+                  Изменить пароль
+                </Link>
+              </div>
 
-                <div className={styles.rowFields}>
-                  <Controller
-                    name='birthDate'
-                    control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        label='Дата рождения'
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
+              <div className={styles.inputWithIcon}>
+                <Input
+                  label='Имя'
+                  type='text'
+                  {...register('name')}
+                  error={errors.name?.message}
+                />
+                <img src={editIcon} className={styles.fieldIcon} alt='' />
+              </div>
 
-                  <Controller
-                    name='gender'
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        label='Пол'
-                        options={GENDERS}
-                        value={field.value}
-                        onChange={field.onChange}
-                        placeholder='Выберите пол'
-                      />
-                    )}
-                  />
-                </div>
-
+              <div className={styles.rowFields}>
                 <Controller
-                  name='city'
+                  name='birthDate'
                   control={control}
                   render={({ field }) => (
-                    <SearchSelect
-                      label='Город'
-                      options={CITIES}
+                    <DatePicker
+                      label='Дата рождения'
                       value={field.value}
                       onChange={field.onChange}
-                      placeholder='Выберите город'
+                    />
+                  )}
+                />
+
+                <Controller
+                  name='gender'
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label='Пол'
+                      options={GENDERS}
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder='Выберите пол'
                     />
                   )}
                 />
               </div>
 
-              <div className={styles.avatarColumn}>
-                <div className={styles.avatarContainer}>
-                  <img
-                    src={profile.avatar || guestIcon}
-                    alt='Аватар'
-                    className={styles.avatarImage}
+              <Controller
+                name='city'
+                control={control}
+                render={({ field }) => (
+                  <SearchSelect
+                    label='Город'
+                    options={CITIES}
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder='Выберите город'
                   />
-                  <Button type='secondary' className={styles.avatarEditButton}>
-                    <img src={cameraIcon} alt='Изменить фото' />
-                  </Button>
+                )}
+              />
+
+              <div className={styles.field}>
+                <label className='body'>О себе</label>
+                <div className={styles.textareaWrapper}>
+                  <textarea
+                    {...register('bio')}
+                    rows={4}
+                    className={`body ${styles.textarea} ${errors.bio ? styles.inputError : ''}`}
+                  />
+                  <img src={editIcon} className={styles.textareaIcon} alt='' />
                 </div>
+                {errors.bio && (
+                  <p className={`caption ${styles.error}`}>
+                    {errors.bio?.message}
+                  </p>
+                )}
               </div>
-            </div>
 
-            <div className={styles.field}>
-              <label className='body'>О себе</label>
-              <div className={styles.textareaWrapper}>
-                <textarea
-                  {...register('bio')}
-                  rows={4}
-                  className={`body ${styles.textarea} ${errors.bio ? styles.inputError : ''}`}
-                />
-                <img src={editIcon} className={styles.textareaIcon} alt='' />
-              </div>
-              {errors.bio && (
-                <p className={`caption ${styles.error}`}>
-                  {errors.bio?.message}
+              <div className={styles.field}>
+                <label className='body'>
+                  Тестовый ID карточки (для демо заявок)
+                </label>
+                <div className={styles.inputWithIcon}>
+                  <input
+                    type='number'
+                    value={profile.cardId ?? ''}
+                    onChange={handleCardIdChange}
+                    placeholder='Например, 1 - это Иван'
+                    className={`body ${styles.input}`}
+                  />
+                </div>
+                <p className='caption'>
+                  Введи id мок-карточки, за которую "отвечает" этот аккаунт -
+                  тогда заявки на неё появятся во Входящих.
                 </p>
-              )}
-            </div>
-
-            <div className={styles.field}>
-              <label className='body'>
-                Тестовый ID карточки (для демо заявок)
-              </label>
-              <div className={styles.inputWithIcon}>
-                <input
-                  type='number'
-                  value={profile.cardId ?? ''}
-                  onChange={handleCardIdChange}
-                  placeholder='Например, 1 - это Иван'
-                  className={`body ${styles.input}`}
-                />
               </div>
-              <p className='caption'>
-                Введи id мок-карточки, за которую "отвечает" этот аккаунт -
-                тогда заявки на неё появятся во Входящих.
-              </p>
+
+              {error && <p className={`caption ${styles.error}`}>{error}</p>}
+              <Button type='primary' htmlType='submit' className={'body'}>
+                {isLoading ? 'Сохранение...' : 'Сохранить'}
+              </Button>
             </div>
 
-            {error && <p className={`caption ${styles.error}`}>{error}</p>}
-            <Button type='primary' htmlType='submit' className={'body'}>
-              {isLoading ? 'Сохранение...' : 'Сохранить'}
-            </Button>
+            <div className={styles.rightSection}>
+              <div className={styles.avatarContainer}>
+                <img
+                  src={profile.avatar || guestIcon}
+                  alt='Аватар'
+                  className={styles.avatarImage}
+                />
+                <button className={styles.avatarEditButton}>
+                  <img src={cameraIcon} alt='Изменить фото' />
+                </button>
+              </div>
+            </div>
           </form>
         </main>
       </div>

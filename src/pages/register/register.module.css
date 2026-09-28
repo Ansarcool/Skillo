@@ -1,3 +1,6 @@
+p {
+    margin: 0;
+}
 .page {
     min-height: 100vh;
     background-color: var(--color-bg-main, #f9faf7);
@@ -6,50 +9,68 @@
 }
 
 .header {
+    width: 100%;
+    max-width: 1440px;
+    height: 84px;
+    box-sizing: border-box;
+    padding: 36px 36px 0 36px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 24px 36px;
 }
-
+.inner {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .logoLink {
     display: flex;
     align-items: center;
 }
 
 .logo {
-    height: 32px;
+    height: 40px;
 }
 
 .closeButton {
+    width: 147px;
+    max-width: 147px;
+    height: 48px;
+    box-sizing: border-box;
     display: flex;
+    justify-content: center;
+    gap: 15px;
     align-items: center;
-    gap: 8px;
     text-decoration: none;
     color: #253017;
     border-radius: 12px;
-    padding: 8px 16px;
-    background-color: #ffffff;
+    padding: 12px;
+    background-color: var(--color-bg-card);
 }
 
 .stepsIndicator {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    margin: 8px 0 32px;
+    gap: 9px;
+    margin: 0 0 32px;
 }
 
 .stepsBar {
     display: flex;
     gap: 8px;
-    width: 200px;
+    width: 212px;
 }
 
 .step {
+    width: 60px;
     flex: 1;
     height: 4px;
-    border-radius: 999px;
+    border-radius: 8px;
     background-color: #e4e8df;
 }
 
@@ -72,46 +93,68 @@
     height: 692px;
     background-color: var(--color-bg-card);
     border-radius: 16px;
-    padding: 60px 20px 20px;
+    padding: 60px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: auto;
 }
+.cardStep1 {
+    padding: 60px;
+}
 
+.cardStep2 {
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardStep3 {
+    padding: 40px 60px;
+    justify-content: flex-start;
+}
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    width: 100%;
 }
 
 .subTitle {
     color: var(--color-text-main);
 }
+.oauthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 .oauthButton {
+    width: 100%;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     border: 1px solid #eaeaea;
     border-radius: 8px;
     background-color: #ffffff;
-    padding: 12px;
+    padding: 12px 20px;
     cursor: pointer;
-    font-family: var(--font-roboto);
+    font-family: var(--font-roboto), sans-serif;
     font-size: 16px;
 }
 
 .oauthButton img {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 .divider {
     display: flex;
     align-items: center;
     text-align: center;
+    margin: 24px 0;
     color: #6b7280;
 }
 
@@ -126,16 +169,19 @@
 .divider span {
     padding: 0 12px;
 }
-
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
-
 .input {
     width: 100%;
-    padding: 12px 14px;
+    padding: 12px 20px;
     border: 1px solid #eaeaea;
     border-radius: 8px;
     font-family: var(--font-roboto);
@@ -150,13 +196,13 @@
 
 .passwordWrapper {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .eyeButton {
     position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 20px;
     background: none;
     border: none;
     cursor: pointer;
@@ -164,8 +210,8 @@
 }
 
 .eyeButton img {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
 }
 
 .hint {
@@ -178,7 +224,6 @@
     font-size: 13px;
     margin: 0;
 }
-
 .submitButton {
     background-color: var(--color-accent, #8bc34a);
     color: #ffffff;
@@ -189,7 +234,9 @@
     cursor: pointer;
     margin-top: 8px;
 }
-
+.nextButton {
+    margin-top: 25px;
+}
 .submitButton:hover {
     opacity: 0.9;
 }
@@ -204,7 +251,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .welcomeCard {
@@ -212,17 +259,21 @@
     height: 692px;
     background-color: var(--color-bg-card);
     border-radius: 16px;
-    padding: 60px 20px 20px;
+    padding: 60px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     overflow: auto;
+    gap: 40px;
 }
 
 .welcomeIcon {
-    width: 160px;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
 }
 
 .avatarUpload {
@@ -278,10 +329,11 @@
 .actions {
     display: flex;
     gap: 12px;
-    margin-top: 8px;
 }
 
 .backButton {
+    width: 100%;
+    height: 48px;
     flex: 1;
     background-color: #ffffff;
     border: 1px solid #eaeaea;
@@ -292,6 +344,8 @@
 }
 
 .continueButton {
+    width: 100%;
+    height: 48px;
     flex: 1;
     background-color: var(--color-accent, #8bc34a);
     color: #ffffff;
@@ -301,7 +355,18 @@
     cursor: pointer;
     font-size: 16px;
 }
-
+.continueButton {
+    width: 100%;
+    height: 48px;
+    flex: 1;
+    background-color: var(--color-accent, #8bc34a);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
 .textarea {
     padding: 12px 14px;
     border: 1px solid #eaeaea;

@@ -40,16 +40,18 @@ export const LoginPage = () => {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to='/' className={styles.logoLink}>
-          <img src={logoIcon} alt='Skillo' className={styles.logo} />
-        </Link>
-        <Link to='/' className={`body ${styles.closeButton}`}>
-          Закрыть <img src={closeIcon} alt='' />
-        </Link>
+        <div className={styles.inner}>
+          <Link to='/' className={styles.logoLink}>
+            <img src={logoIcon} alt='Skillo' className={styles.logo} />
+          </Link>
+          <Link to='/' className={`body ${styles.closeButton}`}>
+            Закрыть <img src={closeIcon} alt='' />
+          </Link>
+        </div>
       </header>
 
       <div className={styles.stepsIndicator}>
-        <span className='h3'>Вход</span>
+        <h2 className='h3'>Вход</h2>
       </div>
 
       <div className={styles.content}>

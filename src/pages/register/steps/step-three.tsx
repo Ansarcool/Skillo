@@ -12,7 +12,7 @@ import { Select } from '../../../shared/ui/select/select.tsx';
 import { Modal } from '../../../shared/ui/modal/modal.tsx';
 import { SkillProposalPreview } from '../skill-propsal-preview';
 import imageIcon from '../../../../public/icons/gallery-add.svg';
-import styles from '../register.module.css';
+import styles from './step-three.module.css';
 import { Button } from '../../../shared/ui/button';
 import { getCategorySlugById } from '../../../shared/lib/category-labels.ts';
 

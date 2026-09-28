@@ -3,6 +3,7 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    height: 24px;
     color: var(--color-text-main);
     min-width: 0;
 }
@@ -17,8 +18,9 @@
 
 .checkboxCustom {
     position: relative;
-    width: 20px;
-    height: 20px;
+    align-self: flex-start;
+    width: 18px;
+    height: 18px;
     border: 2px solid var(--color-accent);
     border-radius: 7px;
     flex-shrink: 0;
@@ -62,6 +64,5 @@
 .checkboxLabel {
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1;
 }

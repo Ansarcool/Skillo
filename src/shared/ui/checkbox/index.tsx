@@ -6,13 +6,15 @@ export type CheckboxProps = {
   checked: boolean;
   indeterminate?: boolean;
   onChange: () => void;
+  className?: string;
 };
 
 export const Checkbox: FC<CheckboxProps> = ({
   label,
   checked,
   indeterminate,
-  onChange
+  onChange,
+  className = ''
 }) => {
   const ref = useRef<HTMLInputElement>(null);
 
@@ -23,7 +25,7 @@ export const Checkbox: FC<CheckboxProps> = ({
   }, [indeterminate]);
 
   return (
-    <label className={`body ${styles.checkbox}`}>
+    <label className={`body ${styles.checkbox} ${className}`}>
       <input
         ref={ref}
         type='checkbox'
@@ -32,7 +34,7 @@ export const Checkbox: FC<CheckboxProps> = ({
         className={styles.checkboxInput}
       />
       <span className={styles.checkboxCustom} />
-      <span className={styles.checkboxLabel}>{label}</span>
+      <span className={`body ${styles.checkboxLabel}`}>{label}</span>
     </label>
   );
 };

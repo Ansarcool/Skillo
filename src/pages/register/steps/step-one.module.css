@@ -1,0 +1,117 @@
+p {
+    margin: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    font-family: var(--font-roboto), sans-serif;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-accent, #8bc34a);
+}
+
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.eyeButton {
+    position: absolute;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.eyeButton img {
+    width: 24px;
+    height: 24px;
+}
+
+.oauthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.oauthButton {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-family: var(--font-roboto), sans-serif;
+    font-size: 16px;
+}
+
+.oauthButton img {
+    width: 24px;
+    height: 24px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #eaeaea;
+}
+
+.divider span {
+    padding: 0 12px;
+}
+
+.hint {
+    color: #6b7280;
+    margin: 0;
+}
+
+.error {
+    color: #bf3920;
+    font-size: 13px;
+    margin: 0;
+}
+
+.nextButton {
+    margin-top: 25px;
+}

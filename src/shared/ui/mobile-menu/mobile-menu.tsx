@@ -7,7 +7,7 @@ import bellIcon from '../../../../public/icons/notification.svg';
 import heartIcon from '../../../../public/icons/like.svg';
 import styles from './mobile-menu.module.css';
 import { ThemeToggle } from '../theme-container/theme-container.tsx';
-import guestIcon from '../../../../public/icons/user-circle.svg';
+import guestIcon from '../../../../public/icons/nonAvatar.png';
 
 export const MobileMenu: FC<TMobileMenuProps> = ({
   isOpen,

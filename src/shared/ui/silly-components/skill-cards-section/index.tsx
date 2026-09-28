@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import styles from './skill-cards-section.module.css';
+import arrowRight from '../../../../../public/icons/chevron-right.svg';
 
 type TSkillCardsSectionProps = {
   title: string;
@@ -14,9 +15,10 @@ export const SkillCardsSection: FC<TSkillCardsSectionProps> = ({
 }) => (
   <section className={styles.section}>
     <div className={styles.sectionHeader}>
-      <h2 className='h2'>{title}</h2>
-      <button className={styles.showAll} onClick={onShowAllClick}>
-        Смотреть все →
+      <h1 className='title'>{title}</h1>
+      <button className={`body ${styles.showAll}`} onClick={onShowAllClick}>
+        Смотреть все
+        <img src={arrowRight} alt='' />
       </button>
     </div>
     <div className={styles.cardsGrid}>{children}</div>

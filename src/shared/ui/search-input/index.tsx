@@ -23,25 +23,23 @@ export const SearchInput: FC<SearchInputProps> = ({
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.searchContainer}>
-        <img src={searchIcon} alt='лупа' className={styles.searchIcon} />
-        <input
-          type='text'
-          value={value}
-          onChange={handleChange}
-          placeholder={placeholder}
-          className={`body ${styles.searchInput}`}
+    <div className={styles.searchContainer}>
+      <img src={searchIcon} alt='лупа' className={styles.searchIcon} />
+      <input
+        type='text'
+        value={value}
+        onChange={handleChange}
+        placeholder={placeholder}
+        className={`body ${styles.searchInput}`}
+      />
+      {value.length > 0 && (
+        <img
+          src={clearIcon}
+          alt='очистить'
+          className={styles.clearIcon}
+          onClick={handleClear}
         />
-        {value.length > 0 && (
-          <img
-            src={clearIcon}
-            alt='очистить'
-            className={styles.clearIcon}
-            onClick={handleClear}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 };

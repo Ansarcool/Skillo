@@ -9,6 +9,7 @@ import bulbIcon from '../../../public/icons/light-bulb.svg';
 import personIcon from '../../../public/icons/user-info.svg';
 import easelIcon from '../../../public/icons/school-board.svg';
 import styles from './register.module.css';
+import crossIcon from '../../../public/icons/cross.svg';
 
 const TOTAL_STEPS = 3;
 
@@ -51,12 +52,15 @@ export const RegisterPage = () => {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <Link to='/' className={styles.logoLink}>
-          <img src={logoIcon} alt='Skillo' className={styles.logo} />
-        </Link>
-        <Link to='/' className={`body ${styles.closeButton}`}>
-          Закрыть ✕
-        </Link>
+        <div className={styles.inner}>
+          <Link to='/' className={styles.logoLink}>
+            <img src={logoIcon} alt='Skillo' className={styles.logo} />
+          </Link>
+          <Link to='/' className={`body ${styles.closeButton}`}>
+            Закрыть
+            <img src={crossIcon} alt='' />
+          </Link>
+        </div>
       </header>
 
       <div className={styles.stepsIndicator}>
@@ -74,7 +78,7 @@ export const RegisterPage = () => {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.card}>
+        <div className={`${styles.card} ${styles[`cardStep${step}`]}`}>
           {step === 1 && <StepOne onSuccess={() => setStep(2)} />}
           {step === 2 && (
             <StepTwo onBack={() => setStep(1)} onNext={() => setStep(3)} />
@@ -85,8 +89,8 @@ export const RegisterPage = () => {
         </div>
 
         <div className={styles.welcomeCard}>
+          <img src={current.icon} alt='' className={styles.welcomeIcon} />
           <div className={styles.welcome}>
-            <img src={current.icon} alt='' className={styles.welcomeIcon} />
             <h2 className='h2'>{current.title}</h2>
             <p className={`body ${styles.subTitle}`}>{current.text}</p>
           </div>

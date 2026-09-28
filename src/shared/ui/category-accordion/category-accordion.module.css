@@ -1,7 +1,6 @@
 .accordion {
     display: flex;
     flex-direction: column;
-    padding-bottom: 4px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -15,7 +14,7 @@
     box-sizing: border-box;
 }
 
-.header_left {
+.headerLeft {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -24,7 +23,7 @@
     overflow: hidden;
 }
 
-.header_left > * {
+.headerLeft > * {
     min-width: 0;
     max-width: 100%;
     overflow: hidden;
@@ -32,37 +31,34 @@
     white-space: nowrap;
 }
 
-.toggle_btn {
+.toggleBtn {
     width: 20px;
     height: 20px;
     background: none;
     border: none;
     cursor: pointer;
-    position: relative;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 
-.toggle_btn::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid #6b7280;
-    border-bottom: 2px solid #6b7280;
-    transform: translate(-50%, -70%) rotate(45deg);
+.toggleBtn img {
+    width: 16px;
+    height: 16px;
     transition: transform 0.25s ease;
 }
 
-.toggle_btn.expanded::before {
-    transform: translate(-50%, -30%) rotate(-135deg);
+.toggleBtn.expanded img {
+    transform: rotate(180deg);
 }
 
-.subcategories_list {
+.subcategoriesList {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding-left: 24px;
-    margin-top: 8px;
+    padding-left: 30px;
+    margin-top: 12px;
+    margin-bottom: 8px;
 }

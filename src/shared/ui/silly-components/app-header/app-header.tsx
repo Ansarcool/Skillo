@@ -12,7 +12,7 @@ import logoIcon from '../../../../../public/icons/Logo.png';
 import arrowIcon from '../../../../../public/icons/chevron-down.png';
 import bellIcon from '../../../../../public/icons/notification.svg';
 import heartIcon from '../../../../../public/icons/like.svg';
-import guestIcon from '../../../../../public/icons/user-circle.svg';
+import guestIcon from '../../../../../public/icons/nonAvatar.png';
 import { ThemeToggle } from '../../theme-container/theme-container.tsx';
 import burgerIcon from '../../../../../public/icons/burger-menu.png';
 import closeIcon from '../../../../../public/icons/cross.svg';
@@ -45,7 +45,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
 
         <div className={styles.menuGroup}>
           <Link to='/about' className={`${styles.aboutLink} body`}>
-            <p>О проекте</p>
+            О проекте
           </Link>
           <div
             className={`${styles.skillsTrigger} body`}
@@ -56,12 +56,10 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
           </div>
         </div>
       </div>
-
       <div className={styles.rightSection}>
         <div className={styles.searchContainer}>
           <SearchInput value={searchValue} onChange={onSearchChange} />
         </div>
-
         {isAuthenticated ? (
           <>
             <div className={styles.iconsGroup}>
@@ -87,39 +85,37 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
               >
                 <img src={heartIcon} alt='' />
               </Link>
-            </div>
+              <div className={styles.userWrapper}>
+                <button
+                  className={`body ${styles.userLink}`}
+                  onClick={onToggleUserMenu}
+                >
+                  <span className='body'>{userName}</span>
+                  <img
+                    src={userAvatar || guestIcon}
+                    alt={userName}
+                    className={styles.userAvatar}
+                  />
+                </button>
 
-            <div className={styles.userWrapper}>
-              <button
-                className={`body ${styles.userLink}`}
-                onClick={onToggleUserMenu}
-              >
-                <span>{userName}</span>
-                <img
-                  src={userAvatar || guestIcon}
-                  alt={userName}
-                  className={styles.userAvatar}
+                <UserMenuUI
+                  isOpen={isUserMenuOpen}
+                  onProfileClick={onProfileClick}
+                  onLogoutClick={onLogoutClick}
                 />
-              </button>
-
-              <UserMenuUI
-                isOpen={isUserMenuOpen}
-                onProfileClick={onProfileClick}
-                onLogoutClick={onLogoutClick}
-              />
+              </div>
+              {notificationsDropdown}
             </div>
-
-            {notificationsDropdown}
           </>
         ) : (
-          <>
+          <div className={styles.actionsGroup}>
             <div className={styles.iconButton}>
               <ThemeToggle />
             </div>
             <div className={styles.authButtons}>
               <Button
                 type='secondary'
-                size='small'
+                size='medium'
                 to='/login'
                 className='body'
               >
@@ -127,14 +123,14 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
               </Button>
               <Button
                 type='primary'
-                size='small'
+                size='medium'
                 to='/register'
                 className='body'
               >
                 Зарегистрироваться
               </Button>
             </div>
-          </>
+          </div>
         )}
       </div>
 

@@ -1,5 +1,6 @@
 .button {
     display: inline-flex;
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     font-family: inherit;
@@ -24,7 +25,7 @@
 }
 
 .medium {
-    padding: 10px 24px;
+    padding: 12px 23px;
     font-size: 16px;
     line-height: 24px;
 }

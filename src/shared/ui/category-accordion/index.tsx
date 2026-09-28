@@ -1,13 +1,13 @@
 import { type FC, useState } from 'react';
 import { Checkbox } from '../checkbox';
 import styles from './category-accordion.module.css';
-
 import { useDispatch, useSelector } from 'react-redux';
 import {
   toggleCategoryGroup,
   toggleSubcategory
 } from '../../../slices/filterSlice.ts';
 import type { AppDispatch, RootState } from '../../../services/store.ts';
+import arrowDown from '../../../../public/icons/chevron-down.svg';
 
 export type Subcategory = {
   id: string;
@@ -37,6 +37,7 @@ export const CategoryAccordion: FC<CategoryAccordionProps> = ({
     selectedCount === subcategories.length && subcategories.length > 0;
   const isIndeterminate =
     selectedCount > 0 && selectedCount < subcategories.length;
+
   const handleParentToggle = () => {
     dispatch(
       toggleCategoryGroup({
@@ -45,6 +46,7 @@ export const CategoryAccordion: FC<CategoryAccordionProps> = ({
       })
     );
   };
+
   const handleSubToggle = (subId: string) => {
     dispatch(toggleSubcategory(subId));
   };
@@ -52,7 +54,7 @@ export const CategoryAccordion: FC<CategoryAccordionProps> = ({
   return (
     <div className={styles.accordion}>
       <div className={styles.header}>
-        <div className={styles.header_left}>
+        <div className={styles.headerLeft}>
           <Checkbox
             label={title}
             checked={isAllSelected}
@@ -63,14 +65,16 @@ export const CategoryAccordion: FC<CategoryAccordionProps> = ({
 
         <button
           type='button'
-          className={`${styles.toggle_btn} ${isOpen ? styles.expanded : ''}`}
+          className={`${styles.toggleBtn} ${isOpen ? styles.expanded : ''}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label='Свернуть/Развернуть'
-        />
+        >
+          <img src={arrowDown} alt='' />
+        </button>
       </div>
 
       {isOpen && (
-        <div className={styles.subcategories_list}>
+        <div className={styles.subcategoriesList}>
           {subcategories.map((sub) => (
             <Checkbox
               key={sub.id}

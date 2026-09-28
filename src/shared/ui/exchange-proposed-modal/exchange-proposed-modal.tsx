@@ -11,14 +11,16 @@ export type TExchangeProposedModalProps = {
 export const ExchangeProposedModal: FC<TExchangeProposedModalProps> = ({
   onClose
 }) => (
-  <Modal onClose={onClose} className={styles.modalOverride}>
+  <Modal onClose={onClose} className={styles.modalExchange}>
     <div className={styles.content}>
       <img src={bellIcon} alt='' className={styles.icon} />
 
-      <h3 className={`h3 ${styles.title}`}>Вы предложили обмен</h3>
-      <p className={`body ${styles.description}`}>
-        Теперь дождитесь подтверждения. Вам придёт уведомление
-      </p>
+      <div className={styles.textColumn}>
+        <h2 className={`h2 ${styles.title}`}>Вы предложили обмен</h2>
+        <p className={`body ${styles.description}`}>
+          Теперь дождитесь подтверждения. Вам придёт уведомление
+        </p>
+      </div>
 
       <Button
         type='primary'

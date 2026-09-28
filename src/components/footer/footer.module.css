@@ -1,25 +1,33 @@
 .footer {
+    margin-top: 60px;
     width: 100%;
-    background-color: var(--color-bg-main);
-    border-top: 1px solid #eaeaea;
+    height: 232px;
+    box-sizing: border-box;
+    background-color: var(--color-bg-card);
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    gap: 190px;
+    max-width: 1440px;
+    margin: 0 auto;
     padding: 32px 36px 20px;
+    flex-wrap: wrap;
     box-sizing: border-box;
 }
 
-.top {
+.leftSection {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    max-width: 1440px;
-    margin: 0 auto;
-    gap: 32px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 110px;
+    flex-shrink: 0;
 }
 
-.bottom {
-    max-width: none;
-    margin: 20px auto 0;
-    padding-top: 16px;
+.rightSection {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .logoLink {
@@ -33,21 +41,24 @@
 
 .logo {
     width: auto;
-    height: 32px;
+    height: 40px;
 }
 
 .columns {
     display: flex;
-    gap: 64px;
+    margin-top: 10px;
+    gap: 255px;
     flex-wrap: wrap;
 }
 
 .column {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
-
+.columns > .column:nth-child(2) {
+    margin-right: 18px;
+}
 .link {
     text-decoration: none;
     color: var(--color-text-main);
@@ -57,14 +68,67 @@
 .link:hover {
     color: var(--color-accent);
 }
+@media (max-width: 1024px) {
+    .inner {
+        gap: 64px;
+    }
 
-.columnMarked .link {
-    position: relative;
-    padding-left: 14px;
+    .columns {
+        gap: 64px;
+    }
 }
 
-.columnMarked .link::before {
-    content: '•';
-    position: absolute;
-    left: 0;
+@media (max-width: 768px) {
+    .footer {
+        margin-top: 40px;
+        height: auto;
+    }
+
+    .inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+        padding: 24px 16px;
+    }
+
+    .leftSection {
+        gap: 16px;
+        width: 100%;
+    }
+
+    .rightSection {
+        width: 100%;
+    }
+
+    .columns {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 0;
+        gap: 12px;
+    }
+
+    .columns > .column:nth-child(2) {
+        margin-right: 0;
+    }
+
+    .column {
+        gap: 12px;
+    }
+}
+@media (max-width: 768px) {
+    .leftSection {
+        display: contents;
+    }
+
+    .logoLink {
+        order: 1;
+    }
+
+    .rightSection {
+        order: 2;
+    }
+
+    .inner > .leftSection > p {
+        order: 3;
+    }
 }

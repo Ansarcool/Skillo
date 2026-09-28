@@ -12,11 +12,15 @@
 }
 
 .modal {
+    position: absolute;
+    top: 225px;
     width: 100%;
-    max-width: 900px;
-    background-color: #ffffff;
+    height: 100%;
+    max-width: 1024px;
+    max-height: 532px;
+    background-color: var(--color-bg-card);
     border-radius: 16px;
-    padding: 40px;
+    padding: 44px 60px 72px 60px;
     box-sizing: border-box;
 }
 @media (max-width: 768px) {

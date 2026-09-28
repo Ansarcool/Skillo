@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { Modal } from '../modal/modal.tsx';
 import { Button } from '../button';
 import styles from './registration-success-modal.module.css';
-import bellIcon from '../../../../public/icons/notification.svg';
+import checkIcon from '../../../../public/icons/Done.svg';
 export type TRegistrationSuccessModalProps = {
   onClose: () => void;
 };
@@ -12,9 +12,9 @@ export const RegistrationSuccessModal: FC<TRegistrationSuccessModalProps> = ({
 }) => (
   <Modal onClose={onClose} className={styles.modalOverride}>
     <div className={styles.content}>
-      <img className='iconCircle' src={bellIcon} alt='' />
+      <img className={styles.iconCircle} src={checkIcon} alt='' />
 
-      <h3 className={`h3 ${styles.title}`}>Ваше предложение создано</h3>
+      <h2 className={`h2 ${styles.title}`}>Ваше предложение создано</h2>
       <p className={`body ${styles.description}`}>
         Теперь вы можете предложить обмен
       </p>

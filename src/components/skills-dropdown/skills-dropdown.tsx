@@ -26,13 +26,15 @@ export const SkillsDropdownContainer = ({
     }
   }, [isOpen, skills.length, dispatch]);
 
+  const visibleCategories = skills.slice(0, 6);
+
   return (
     <Dropdown isOpen={isOpen} onClose={onClose}>
       {isLoading && <p>Загрузка навыков...</p>}
       {error && <p>Ошибка: {error}</p>}
       {!isLoading && !error && (
-        <>
-          {skills.map((category) => (
+        <div className={styles.categoriesGrid}>
+          {visibleCategories.map((category) => (
             <div key={category.id} className={styles.categoryItem}>
               <div className={styles.categoryHeader}>
                 <div className={styles.categoryIconWrapper}>
@@ -57,7 +59,7 @@ export const SkillsDropdownContainer = ({
               </div>
             </div>
           ))}
-        </>
+        </div>
       )}
     </Dropdown>
   );

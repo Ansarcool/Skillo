@@ -4,6 +4,7 @@ import { Radio } from '../../radio';
 import styles from '../../silly-components/filter-bar/filter-sidebar.module.css';
 import type { TFiltersSidebarUIProps } from './types.ts';
 import { Checkbox } from '../../checkbox';
+import arrowDown from '../../../../../public/icons/chevron-down.svg';
 
 const VISIBLE_CATEGORIES_COUNT = 6;
 const VISIBLE_CITIES_COUNT = 5;
@@ -39,9 +40,9 @@ export const FiltersSidebarUI: FC<TFiltersSidebarUIProps> = ({
     <aside className={styles.filtersSidebar}>
       <div className={styles.top}>
         {!hideTitle && (
-          <h3>
+          <h2>
             {chips.length === 0 ? 'Фильтры' : `Фильтры (${chips.length})`}
-          </h3>
+          </h2>
         )}
         {chips.length > 0 && (
           <button
@@ -96,10 +97,11 @@ export const FiltersSidebarUI: FC<TFiltersSidebarUIProps> = ({
         {skillCategories.length > VISIBLE_CATEGORIES_COUNT && (
           <button
             type='button'
-            className={`caption ${styles.expandButton}`}
+            className={`body ${styles.expandButton}`}
             onClick={() => setShowAllCategories((prev) => !prev)}
           >
-            {showAllCategories ? 'Скрыть' : 'Все категории'} ⌄
+            {showAllCategories ? 'Скрыть' : 'Все категории'}
+            <img src={arrowDown} alt='' />
           </button>
         )}
       </div>
@@ -132,6 +134,7 @@ export const FiltersSidebarUI: FC<TFiltersSidebarUIProps> = ({
           <Checkbox
             key={city.id}
             label={city.label}
+            className={styles.cityCheckbox}
             checked={selectedCityIds.includes(city.id)}
             onChange={() => onCityToggle(city.id)}
           />
@@ -140,10 +143,11 @@ export const FiltersSidebarUI: FC<TFiltersSidebarUIProps> = ({
         {cities.length > VISIBLE_CITIES_COUNT && (
           <button
             type='button'
-            className={`caption ${styles.expandButton}`}
+            className={`body ${styles.expandButton}`}
             onClick={() => setShowAllCities((prev) => !prev)}
           >
-            {showAllCities ? 'Скрыть' : 'Все города'} ⌄
+            {showAllCities ? 'Скрыть' : 'Все города'}
+            <img src={arrowDown} alt='' />
           </button>
         )}
       </div>

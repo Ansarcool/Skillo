@@ -71,38 +71,47 @@ export const SkillDetailPageUI: FC<TSkillDetailPageUIProps> = ({
           </div>
 
           <p className={`body ${styles.description}`}>{card.bio}</p>
-
-          <div className={styles.tagsBlock}>
-            <h4>Может научить</h4>
-            <div className={styles.tags}>
-              {card.canTeach.map((skill, index) => (
-                <span
-                  key={skill.id ?? index}
-                  className={`caption ${styles.tag}`}
-                  style={{
-                    backgroundColor: tagColorByCategory[skill.category]
-                  }}
-                >
-                  {skill.name}
-                </span>
-              ))}
+          <div className={styles.skillBlock}>
+            <div className={styles.tagsBlock}>
+              <h4>Может научить</h4>
+              <div className={styles.tags}>
+                {card.canTeach.map((skill, index) => (
+                  <span
+                    key={skill.id ?? index}
+                    className={`caption ${styles.tag}`}
+                    style={{
+                      backgroundColor: tagColorByCategory[skill.category]
+                    }}
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className={styles.tagsBlock}>
-            <h4>Хочет научиться</h4>
-            <div className={styles.tags}>
-              {card.wantsToLearn.map((skill, index) => (
-                <span
-                  key={skill.id ?? index}
-                  className={`caption ${styles.tag}`}
-                  style={{
-                    backgroundColor: tagColorByCategory[skill.category]
-                  }}
-                >
-                  {skill.name}
-                </span>
-              ))}
+            <div className={styles.tagsBlock}>
+              <h4>Хочет научиться</h4>
+              <div className={styles.tags}>
+                {card.wantsToLearn.slice(0, 2).map((skill, index) => (
+                  <span
+                    key={skill.id ?? index}
+                    className={`caption ${styles.tag}`}
+                    style={{
+                      backgroundColor: tagColorByCategory[skill.category]
+                    }}
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+                {card.wantsToLearn.length > 2 && (
+                  <span
+                    className={`caption ${styles.tag}`}
+                    style={{ backgroundColor: 'var(--tag-plus)' }}
+                  >
+                    +{card.wantsToLearn.length - 1}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </aside>
@@ -130,11 +139,13 @@ export const SkillDetailPageUI: FC<TSkillDetailPageUIProps> = ({
 
           <div className={styles.mainContent}>
             <div className={styles.infoColumn}>
-              <h1 className='h1'>{mainSkill?.name}</h1>
-              <p className='caption'>
-                {mainSkill && categoryLabelBySlug[mainSkill.category]}
-                {mainSkill?.name ? ` / ${mainSkill.name}` : ''}
-              </p>
+              <div className={styles.skillColumn}>
+                <h1 className='h1'>{mainSkill?.name}</h1>
+                <p className={`caption ${styles.skillSubcategory}`}>
+                  {mainSkill && categoryLabelBySlug[mainSkill.category]}
+                  {mainSkill?.name ? ` / ${mainSkill.name}` : ''}
+                </p>
+              </div>
               <p className={`body ${styles.description}`}>
                 {mainSkill?.description}
               </p>

@@ -2,28 +2,22 @@ import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setProfile,
-  type TProfileState
-} from '../../../slices/profileSlice.ts';
+import { setProfile } from '../../../slices/profileSlice.ts';
 import { getSkillsThunk } from '../../../slices/skillsSlice.ts';
 import type { AppDispatch, RootState } from '../../../services/store.ts';
 import { stepTwoSchema, type TStepTwoFormValues } from '../step-two-schema.ts';
 import { Select } from '../../../shared/ui/select/select.tsx';
 import { SearchSelect } from '../../../shared/ui/search-select/search-select.tsx';
 import { DatePicker } from '../../../shared/ui/date';
-import styles from '../register.module.css';
+import styles from './step-two.module.css';
 import { Button } from '../../../shared/ui/button';
 import { getCategorySlugById } from '../../../shared/lib/category-labels.ts';
+import guestIcon from '../../../../public/icons/nonAvatar.png';
 
 type TStepTwoProps = {
   onBack: () => void;
   onNext: () => void;
 };
-export type TProfileStateTwo = Omit<
-  TProfileState,
-  'categoryId' | 'subcategoryId' | 'canTeach'
->;
 
 const cities = ['Лондон', 'Хельсинки', 'Будапешт', 'Таллин', 'Роттердам'].map(
   (city) => ({ value: city, label: city })
@@ -41,7 +35,7 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
     (state: RootState) => state.skills.skills
   );
   const profile = useSelector((state: RootState) => state.profile);
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(guestIcon);
 
   useEffect(() => {
     if (skillCategories.length === 0) {
@@ -126,7 +120,7 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
           {avatarPreview ? (
             <img src={avatarPreview} alt='avatar' />
           ) : (
-            <span className={styles.avatarPlaceholder}>👤</span>
+            <span className={`body ${styles.avatarPlaceholder}`}>Аватар</span>
           )}
           <span className={styles.avatarPlus}>+</span>
         </div>

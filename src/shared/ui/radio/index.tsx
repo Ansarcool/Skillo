@@ -11,7 +11,7 @@ export const Radio: FC<TRadioProps> = ({ label, name, checked, onChange }) => (
       onChange={onChange}
       className={styles.radioInput}
     />
-    <span className={styles.radioCustom} />
+    <span className={`body ${styles.radioCustom}`} />
     {label}
   </label>
 );

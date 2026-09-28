@@ -1,19 +1,25 @@
-.section {
-    margin-bottom: 48px;
-}
-
 .sectionHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
 }
 
 .showAll {
-    background: none;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px 12px 24px;
+    width: 187px;
+    height: 48px;
+    max-width: 187px;
+    max-height: 48px;
+    background: var(--color-bg-card);
     border: none;
-    color: #6b7280;
-    font-size: 14px;
+    border-radius: 12px;
+    color: var(--color-text-main);
+    font-size: 16px;
     cursor: pointer;
 }
 

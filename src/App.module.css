@@ -8,12 +8,15 @@
 }
 
 .content {
+    display: flex;
     flex: 1;
     min-width: 0;
+    gap: 40px;
+    flex-direction: column;
 }
 
 .sidebarDesktop {
-    width: 280px;
+    width: 324px;
     flex-shrink: 0;
 }
 

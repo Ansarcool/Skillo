@@ -13,20 +13,19 @@
     height: 100%;
     width: 100%;
     margin: 0 auto;
+    padding-top: 12px;
     padding-left: 36px;
     padding-right: 36px;
     box-sizing: border-box;
-    gap: 32px;
+    gap: 36px;
 }
 .rightSection {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 20px;
+    gap: 32px;
     flex-grow: 1;
 }
-
 .leftSection {
     display: flex;
     align-items: center;
@@ -38,7 +37,7 @@
     width: 159px;
     height: 40px;
     display: flex;
-    align-items: center;
+    align-self: center;
     gap: 12px;
     text-decoration: none;
     color: inherit;
@@ -62,22 +61,38 @@
 }
 
 .arrow {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 8px;
     object-fit: contain;
 }
 
 .searchContainer {
     flex-grow: 1;
-    max-width: 527px;
+    width: 100%;
+    max-width: 671px;
+    height: 48px;
 }
 
 .authButtons {
     display: flex;
-    gap: 10px;
+    height: 48px;
+    gap: 8px;
     flex-shrink: 0;
 }
-
+.authButtons > :first-child {
+    width: 92px;
+}
+.authButtons > * {
+    box-sizing: border-box;
+}
+.authButtons > :last-child {
+    width: 208px;
+}
+.actionsGroup {
+    display: flex;
+    gap: 33px;
+    align-items: center;
+}
 .menuGroup {
     position: relative;
     display: flex;
@@ -89,39 +104,36 @@
 .iconsGroup {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
 }
 
 .iconButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
+    padding: 0;
+    width: 24px;
+    height: 24px;
     background: none;
     border: none;
     cursor: pointer;
     text-decoration: none;
-    padding: 0;
 }
 
 .iconButton img {
-    width: 22px;
-    height: 22px;
-}
-
-
-.iconButton img {
-    width: 20px;
-    height: 20px;
+    width: 100%;
+    height: 100%;
 }
 
 .userLink {
     display: flex;
     align-items: center;
-    gap: 4px;
-    text-decoration: none;
-    color: #253017;
+    background: none;
+    padding: 0;
+    gap: 12px;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-main);
 }
 
 .userAvatar {
@@ -147,16 +159,6 @@
 }
 .userWrapper {
     position: relative;
-}
-
-.userLink {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-text-main);
 }
 
 .notificationsWrapper {

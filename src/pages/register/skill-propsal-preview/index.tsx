@@ -30,14 +30,14 @@ export const SkillProposalPreview: FC<TSkillProposalPreviewProps> = ({
     <div className={styles.preview}>
       <div className={styles.heading}>
         <h2 className='h3'>Ваше предложение</h2>
-        <p className={`body ${styles.subtitle}`}>
+        <p className={`caption ${styles.subtitle}`}>
           Пожалуйста, проверьте и подтвердите правильность данных
         </p>
       </div>
 
       <div className={styles.body}>
         <div className={styles.info}>
-          <h3 className='h3'>{skillName}</h3>
+          <h1 className='h1'>{skillName}</h1>
           <p className={`caption ${styles.category}`}>
             {category}
             {subcategory ? ` / ${subcategory}` : ''}

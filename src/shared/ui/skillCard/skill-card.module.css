@@ -1,19 +1,25 @@
+p{
+  margin: 4px 0 0 0;
+}
 .skillCard {
+  box-sizing: border-box;
   position: relative;
   background-color: var(--color-bg-card);
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--color-accent);
   display: flex;
+  width: 324px;
+  height: 368px;
+  max-width: 324px;
+  max-height: 368px;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .favoriteButton {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 18px;
+  right: 20px;
   background: none;
   border: none;
   cursor: pointer;
@@ -21,8 +27,8 @@
 }
 
 .favoriteButton img {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .userInfo {
@@ -32,8 +38,8 @@
 }
 
 .avatar {
-  width: 56px;
-  height: 56px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -47,30 +53,32 @@
 }
 
 .userName {
+  font-size: 20px;
   font-weight: 600;
+  line-height: 24px;
   display: block;
 }
 
 .locationAge {
   color: var(--color-text-main);
-  font-size: 13px;
-  margin: 4px 0 0;
 }
 
 .skillInfo {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex: 1;
+
 }
 
 .canTeach h4,
 .wantToLearn h4 {
-  margin: 0 0 8px;
-  font-size: 14px;
-  font-weight: 500;
+  letter-spacing: 0.02em;
 }
-
+.canTeach, .wantToLearn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -78,9 +86,8 @@
 }
 
 .tag {
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 13px;
+  padding: 8px 12px 8px 12px;
+  border-radius: 20px;
   color: black;
 }
 
@@ -109,6 +116,7 @@
 }
 
 .detailsButton {
+  height: 48px;
   margin-top: auto;
   display: flex;
   align-items: center;

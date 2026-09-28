@@ -1,8 +1,17 @@
 .modalOverride {
-    max-width: 420px;
+    position: absolute;
+    top: 220px;
+    display: flex;
+    height: 100%;
+    max-width: 556px;
+    max-height: 420px;
+    padding: 60px 60px;
+    align-items: flex-end;
+    border-radius: 12px;
 }
 
 .content {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,10 +22,12 @@
 .title {
     margin: 0;
 }
-
 .description {
     color: #6b7280;
     margin: 0 0 12px;
+}
+.iconCircle {
+    margin-bottom: 50px;
 }
 
 .button {

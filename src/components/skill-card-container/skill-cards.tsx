@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getSkillCardsThunk } from '../../slices/skillsSlice.ts';
 import { toggleFavorite } from '../../slices/favoritesSlice.ts';
 import type { RootState, AppDispatch } from '../../services/store.ts';
@@ -11,9 +11,11 @@ import { PaginationUI } from '../../shared/ui/pagination/pagination.tsx';
 import { filterSkillCards } from '../../entites/skill/lib/filterCards.ts';
 import { hasActiveFilters } from '../../entites/skill/lib/hasActiveFilters.ts';
 import { paginate, getTotalPages } from '../../entites/skill/lib/pagination.ts';
+import { matchSkillCards } from '../../entites/skill/lib/matchSkillCards.ts';
 import styles from './skill-cards-results.module.css';
 import { getRequestsThunk } from '../../slices/requestSlice.ts';
 import { buildProfileCard } from '../../entites/skill/lib/buildProfileCard.ts';
+import sortIcon from '../../../public/icons/sort.svg';
 
 const SECTION_CARDS_LIMIT = 3;
 
@@ -33,6 +35,7 @@ export const SkillCardsContainer = ({
 }: TSkillCardsContainerProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { skillCards, isLoading, error } = useSelector(
     (state: RootState) => state.skills
   );
@@ -41,12 +44,18 @@ export const SkillCardsContainer = ({
   const filters = useSelector((state: RootState) => state.filter);
   const profile = useSelector((state: RootState) => state.profile);
   const authEmail = useSelector((state: RootState) => state.auth.user?.email);
-  const [sortMode, setSortMode] = useState<TSortMode>('newest');
-  const [currentPage, setCurrentPage] = useState(1);
+
   const myProfileCard = buildProfileCard(profile, authEmail ?? '');
+  const isAuthenticated = Boolean(myProfileCard);
+
   const allCardsWithMine = myProfileCard
     ? [myProfileCard, ...skillCards]
     : skillCards;
+  const initialSort = (searchParams.get('sort') as TSortMode) || 'newest';
+  const isMatchMode = searchParams.get('match') === '1';
+
+  const [sortMode, setSortMode] = useState<TSortMode>(initialSort);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (skillCards.length === 0) {
@@ -75,7 +84,12 @@ export const SkillCardsContainer = ({
         (r) => r.fromUserId === profile.cardId && r.toUserId === cardId
       )
     );
-  const filteredCards = filterSkillCards(allCardsWithMine, filters);
+  const baseCards =
+    isMatchMode && myProfileCard
+      ? matchSkillCards(allCardsWithMine, myProfileCard)
+      : allCardsWithMine;
+
+  const filteredCards = filterSkillCards(baseCards, filters);
 
   const sortedCards = [...filteredCards].sort((a, b) =>
     sortMode === 'popular'
@@ -107,20 +121,22 @@ export const SkillCardsContainer = ({
   );
 
   if (showFullGrid) {
+    const headingText = isMatchMode
+      ? `Точные совпадения: ${filteredCards.length}`
+      : isFiltering
+        ? `Подходящие предложения: ${filteredCards.length}`
+        : `Все предложения: ${filteredCards.length}`;
+
     return (
       <div>
         <div className={styles.resultsHeader}>
-          <h2 className='h2'>
-            {isFiltering
-              ? `Подходящие предложения: ${filteredCards.length}`
-              : `Все предложения: ${filteredCards.length}`}
-          </h2>
+          <h1 className='h1'>{headingText}</h1>
           <button
             type='button'
             className={`body ${styles.sortButton}`}
             onClick={handleToggleSort}
           >
-            ↑↓ {SORT_LABELS[sortMode]}
+            <img src={sortIcon} /> {SORT_LABELS[sortMode]}
           </button>
         </div>
         <div className={styles.resultsGrid}>{pageCards.map(renderCard)}</div>
@@ -129,6 +145,49 @@ export const SkillCardsContainer = ({
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
+      </div>
+    );
+  }
+
+  if (isAuthenticated && myProfileCard) {
+    const exactMatchCards = matchSkillCards(skillCards, myProfileCard).slice(
+      0,
+      SECTION_CARDS_LIMIT
+    );
+
+    const newIdeasCards = [...skillCards]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .slice(0, SECTION_CARDS_LIMIT);
+
+    const recommendedCards = skillCards
+      .filter((card) => !favoriteIds.includes(card.id))
+      .slice(0, SECTION_CARDS_LIMIT);
+
+    return (
+      <div className={styles.sectionsGroup}>
+        <SkillCardsSection
+          title='Точное совпадение'
+          onShowAllClick={() => navigate('/catalog?match=1')}
+        >
+          {exactMatchCards.map(renderCard)}
+        </SkillCardsSection>
+
+        <SkillCardsSection
+          title='Новые идеи'
+          onShowAllClick={() => navigate('/catalog?sort=newest')}
+        >
+          {newIdeasCards.map(renderCard)}
+        </SkillCardsSection>
+
+        <SkillCardsSection
+          title='Рекомендуем'
+          onShowAllClick={() => navigate('/catalog')}
+        >
+          {recommendedCards.map(renderCard)}
+        </SkillCardsSection>
       </div>
     );
   }
@@ -149,17 +208,17 @@ export const SkillCardsContainer = ({
     .slice(0, SECTION_CARDS_LIMIT);
 
   return (
-    <div>
+    <div className={styles.sectionsGroup}>
       <SkillCardsSection
         title='Популярное'
-        onShowAllClick={() => navigate('/catalog')}
+        onShowAllClick={() => navigate('/catalog?sort=popular')}
       >
         {popularCards.map(renderCard)}
       </SkillCardsSection>
 
       <SkillCardsSection
         title='Новое'
-        onShowAllClick={() => navigate('/catalog')}
+        onShowAllClick={() => navigate('/catalog?sort=newest')}
       >
         {newestCards.map(renderCard)}
       </SkillCardsSection>
