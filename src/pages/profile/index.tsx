@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../services/store.ts';
 import { profileSchema, type TProfileFormValues } from './schema.ts';
 import {
@@ -123,24 +123,46 @@ export const ProfilePage = () => {
       <div className={styles.mainContainer}>
         <aside className={styles.sidebar}>
           <nav className={styles.sideMenu}>
-            <Link to='/requests' className={`body ${styles.sideItem}`}>
+            <NavLink
+              to='/requests'
+              className={({ isActive }) =>
+                `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+              }
+            >
               <img src={emailIcon} alt='' /> Заявки
-            </Link>
-            <Link to='/exchanges' className={`body ${styles.sideItem}`}>
+            </NavLink>
+            <NavLink
+              to='/exchanges'
+              className={({ isActive }) =>
+                `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+              }
+            >
               <img src={messageIcon} alt='' /> Мои обмены
-            </Link>
-            <Link to='/favorites' className={`body ${styles.sideItem}`}>
+            </NavLink>
+            <NavLink
+              to='/favorites'
+              className={({ isActive }) =>
+                `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+              }
+            >
               <img src={heartIcon} alt='' /> Избранное
-            </Link>
-            <Link to='/my-skills' className={`body ${styles.sideItem}`}>
+            </NavLink>
+            <NavLink
+              to='/my-skills'
+              className={({ isActive }) =>
+                `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+              }
+            >
               <img src={ideaIcon} alt='' /> Мои навыки
-            </Link>
-            <Link
+            </NavLink>
+            <NavLink
               to='/profile'
-              className={`body ${styles.sideItem} ${styles.sideItemActive}`}
+              className={({ isActive }) =>
+                `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+              }
             >
               <img src={userIcon} alt='' /> Личные данные
-            </Link>
+            </NavLink>
           </nav>
         </aside>
 

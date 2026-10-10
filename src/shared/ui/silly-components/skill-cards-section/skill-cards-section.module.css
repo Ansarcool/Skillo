@@ -10,11 +10,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 24px 12px 24px;
+    padding: 12px 24px;
     width: 187px;
     height: 48px;
-    max-width: 187px;
-    max-height: 48px;
+    max-width: 100%;
     background: var(--color-bg-card);
     border: none;
     border-radius: 12px;
@@ -25,20 +24,33 @@
 
 .cardsGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
     gap: 24px;
     width: 100%;
 }
 
-@media (max-width: 992px) {
-    .cardsGrid {
-        grid-template-columns: repeat(2, 1fr);
+.cardsGrid > * {
+    min-width: 0;
+}
+
+@media (max-width: 1024px) {
+    .sectionHeader {
+        flex-direction: column;
+        align-items: flex-start;
         gap: 16px;
+    }
+
+    .showAll {
+        width: 100%;
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
     .cardsGrid {
-        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .sectionHeader {
+        margin-bottom: 24px;
     }
 }

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 export type TAppHeaderUIProps = {
   searchValue: string;
   onSearchChange: (value: string) => void;
-  onToggleSkills: () => void;
+  onToggleSkills: (e: React.MouseEvent) => void;
   isSkillsOpen: boolean;
   isAuthenticated: boolean;
   userName: string;

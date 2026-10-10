@@ -36,25 +36,35 @@ export const SkillCardsContainer = ({
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { skillCards, isLoading, error } = useSelector(
-    (state: RootState) => state.skills
-  );
+
+  const {
+    skillCards = [],
+    isLoading,
+    error
+  } = useSelector((state: RootState) => state.skills);
   const requests = useSelector((state: RootState) => state.request.items);
-  const favoriteIds = useSelector((state: RootState) => state.favorites.ids);
+  const favoriteIds = useSelector(
+    (state: RootState) => state.favorites.ids || []
+  );
   const filters = useSelector((state: RootState) => state.filter);
   const profile = useSelector((state: RootState) => state.profile);
+  const token = useSelector((state: RootState) => state.auth.token);
   const authEmail = useSelector((state: RootState) => state.auth.user?.email);
 
-  const myProfileCard = buildProfileCard(profile, authEmail ?? '');
-  const isAuthenticated = Boolean(myProfileCard);
+  const isAuthenticated = Boolean(token);
+  const myProfileCard = isAuthenticated
+    ? buildProfileCard(profile, authEmail ?? '')
+    : null;
 
   const allCardsWithMine = myProfileCard
     ? [myProfileCard, ...skillCards]
     : skillCards;
-  const initialSort = (searchParams.get('sort') as TSortMode) || 'newest';
+
+  const sortParam = searchParams.get('sort') as TSortMode;
+  const sortMode: TSortMode =
+    sortParam === 'popular' || sortParam === 'newest' ? sortParam : 'newest';
   const isMatchMode = searchParams.get('match') === '1';
 
-  const [sortMode, setSortMode] = useState<TSortMode>(initialSort);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -66,10 +76,11 @@ export const SkillCardsContainer = ({
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortMode]);
-
   useEffect(() => {
-    dispatch(getRequestsThunk());
-  }, [dispatch]);
+    if (isAuthenticated) {
+      dispatch(getRequestsThunk());
+    }
+  }, [isAuthenticated, dispatch]);
 
   if (isLoading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error}</p>;
@@ -77,13 +88,13 @@ export const SkillCardsContainer = ({
   const isFiltering = hasActiveFilters(filters);
   const showFullGrid = isFiltering || forceShowAll;
 
-  const isCardRequestSent = (cardId: number) =>
-    Boolean(
-      profile.cardId !== null &&
-      requests.some(
-        (r) => r.fromUserId === profile.cardId && r.toUserId === cardId
-      )
+  const isCardRequestSent = (cardId: number) => {
+    if (!profile?.cardId || !Array.isArray(requests)) return false;
+    return requests.some(
+      (r) => r.fromUserId === profile.cardId && r.toUserId === cardId
     );
+  };
+
   const baseCards =
     isMatchMode && myProfileCard
       ? matchSkillCards(allCardsWithMine, myProfileCard)
@@ -98,7 +109,10 @@ export const SkillCardsContainer = ({
   );
 
   const handleToggleSort = () => {
-    setSortMode((prev) => (prev === 'newest' ? 'popular' : 'newest'));
+    const nextSort = sortMode === 'newest' ? 'popular' : 'newest';
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('sort', nextSort);
+    navigate(`?${newParams.toString()}`, { replace: true });
   };
 
   const totalPages = getTotalPages(sortedCards.length);
@@ -136,7 +150,7 @@ export const SkillCardsContainer = ({
             className={`body ${styles.sortButton}`}
             onClick={handleToggleSort}
           >
-            <img src={sortIcon} /> {SORT_LABELS[sortMode]}
+            <img src={sortIcon} alt='' /> {SORT_LABELS[sortMode]}
           </button>
         </div>
         <div className={styles.resultsGrid}>{pageCards.map(renderCard)}</div>

@@ -8,8 +8,8 @@ import { UserMenuUI } from '../../user-menu';
 import { MobileMenu } from '../../mobile-menu/mobile-menu.tsx';
 import '../../../styles/fonts.css';
 
-import logoIcon from '../../../../../public/icons/Logo.png';
-import arrowIcon from '../../../../../public/icons/chevron-down.png';
+import logoIcon from '../../../../../public/icons/Logo.svg';
+import arrowIcon from '../../../../../public/icons/chevron-down.svg';
 import bellIcon from '../../../../../public/icons/notification.svg';
 import heartIcon from '../../../../../public/icons/like.svg';
 import guestIcon from '../../../../../public/icons/nonAvatar.png';

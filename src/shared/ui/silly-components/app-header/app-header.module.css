@@ -61,8 +61,8 @@
 }
 
 .arrow {
-    width: 16px;
-    height: 8px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
 }
 
@@ -188,7 +188,7 @@
     flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .header {
         height: auto;
         min-height: 72px;

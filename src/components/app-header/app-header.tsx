@@ -75,7 +75,8 @@ export const AppHeader = () => {
   const handleSearchChange = (value: string) => {
     dispatch(setSearch(value));
   };
-  const handleToggleSkills = () => {
+  const handleToggleSkills = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsSkillsOpen((prev) => !prev);
   };
   const handleToggleUserMenu = () => {

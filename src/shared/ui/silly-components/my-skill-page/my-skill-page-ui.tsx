@@ -1,11 +1,16 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import type { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { Select } from '../../select/select.tsx';
 import { Button } from '../../button';
 import type { TStepThreeFormValues } from '../../../../pages/register/step-three-chema.ts';
-import styles from '../../../../pages/profile/profile.module.css';
+import styles from './my-skill-page.module.css';
+import emailIcon from '../../../../../public/icons/request.svg';
+import messageIcon from '../../../../../public/icons/message-text.svg';
+import heartIcon from '../../../../../public/icons/like.svg';
+import ideaIcon from '../../../../../public/icons/idea.svg';
+import userIcon from '../../../../../public/icons/user.svg';
 
 type TOption = { value: string; label: string };
 
@@ -36,24 +41,50 @@ export const MySkillsPageUI: FC<TMySkillsPageUIProps> = ({
     <div className={styles.mainContainer}>
       <aside className={styles.sidebar}>
         <nav className={styles.sideMenu}>
-          <Link to='/requests' className={styles.sideItem}>
-            Заявки
-          </Link>
-          <Link to='/exchanges' className={styles.sideItem}>
-            Мои обмены
-          </Link>
-          <Link to='/favorites' className={styles.sideItem}>
-            Избранное
-          </Link>
-          <Link
-            to='/my-skills'
-            className={`${styles.sideItem} ${styles.sideItemActive}`}
+          <NavLink
+            to='/requests'
+            className={({ isActive }) =>
+              `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+            }
           >
-            Мои навыки
-          </Link>
-          <Link to='/profile' className={styles.sideItem}>
-            Личные данные
-          </Link>
+            <img src={emailIcon} alt='' /> Заявки
+          </NavLink>
+
+          <NavLink
+            to='/exchanges'
+            className={({ isActive }) =>
+              `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+            }
+          >
+            <img src={messageIcon} alt='' /> Мои обмены
+          </NavLink>
+
+          <NavLink
+            to='/favorites'
+            className={({ isActive }) =>
+              `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+            }
+          >
+            <img src={heartIcon} alt='' /> Избранное
+          </NavLink>
+
+          <NavLink
+            to='/my-skills'
+            className={({ isActive }) =>
+              `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+            }
+          >
+            <img src={ideaIcon} alt='' /> Мои навыки
+          </NavLink>
+
+          <NavLink
+            to='/profile'
+            className={({ isActive }) =>
+              `body ${styles.sideItem} ${isActive ? styles.sideItemActive : ''}`
+            }
+          >
+            <img src={userIcon} alt='' /> Личные данные
+          </NavLink>
         </nav>
       </aside>
 

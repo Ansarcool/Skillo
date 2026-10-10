@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './footer.module.css';
-import logoIcon from '../../../public/icons/Logo.png';
+import logoIcon from '../../../public/icons/Logo.svg';
 
 export const Footer: FC = () => {
   const currentYear = new Date().getFullYear();

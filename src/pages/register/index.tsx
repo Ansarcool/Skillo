@@ -4,7 +4,7 @@ import { StepOne } from './steps/step-one.tsx';
 import { StepTwo } from './steps/step-two.tsx';
 import { StepThree } from './steps/step-three.tsx';
 import { RegistrationSuccessModal } from '../../shared/ui/registration-success-modal/registration-success-modal.tsx';
-import logoIcon from '../../../public/icons/Logo.png';
+import logoIcon from '../../../public/icons/Logo.svg';
 import bulbIcon from '../../../public/icons/light-bulb.svg';
 import personIcon from '../../../public/icons/user-info.svg';
 import easelIcon from '../../../public/icons/school-board.svg';

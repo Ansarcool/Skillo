@@ -6,7 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { loginThunk } from '../../slices/authSlice.ts';
 import type { AppDispatch, RootState } from '../../services/store.ts';
 import { loginSchema, type TLoginFormValues } from './login-schema.ts';
-import logoIcon from '../../../public/icons/Logo.png';
+import logoIcon from '../../../public/icons/Logo.svg';
 import bulbIcon from '../../../public/icons/light-bulb.svg';
 import googleIcon from '../../../public/icons/google.svg';
 import appleIcon from '../../../public/icons/apple.svg';
@@ -61,15 +61,16 @@ export const LoginPage = () => {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
-            <button type='button' className={`body ${styles.oauthButton}`}>
-              <img src={googleIcon} alt='' />
-              Продолжить с Google
-            </button>
-            <button type='button' className={`body ${styles.oauthButton}`}>
-              <img src={appleIcon} alt='' />
-              Продолжить с Apple
-            </button>
-
+            <div className={styles.oauthButtons}>
+              <button type='button' className={`body ${styles.oauthButton}`}>
+                <img src={googleIcon} alt='' />
+                Продолжить с Google
+              </button>
+              <button type='button' className={`body ${styles.oauthButton}`}>
+                <img src={appleIcon} alt='' />
+                Продолжить с Apple
+              </button>
+            </div>
             <div className={styles.divider}>
               <span className='caption'>или</span>
             </div>
