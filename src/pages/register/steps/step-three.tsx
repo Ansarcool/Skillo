@@ -8,6 +8,7 @@ import {
   stepThreeSchema,
   type TStepThreeFormValues
 } from '../step-three-chema.ts';
+import type { TRegisterFormValues } from '../schema.ts'; // 👈 Добавили импорт типа
 import { Select } from '../../../shared/ui/select/select.tsx';
 import { Modal } from '../../../shared/ui/modal/modal.tsx';
 import { SkillProposalPreview } from '../skill-propsal-preview';
@@ -15,20 +16,43 @@ import imageIcon from '../../../../public/icons/gallery-add.svg';
 import styles from './step-three.module.css';
 import { Button } from '../../../shared/ui/button';
 import { getCategorySlugById } from '../../../shared/lib/category-labels.ts';
+import { registerThunk } from '../../../slices/authSlice.ts';
+
+type TStepTwoData = {
+  name: string;
+  avatar: string | null;
+  birthDate: string;
+  gender: 'any' | 'male' | 'female';
+  city: string;
+  wantsToLearn: {
+    id: number;
+    category: any;
+    subcategoryId: any;
+    name: any;
+    description: string;
+  }[];
+};
 
 type TStepThreeProps = {
+  accountData: TRegisterFormValues | null;
+  stepTwoData: TStepTwoData;
   onBack: () => void;
   onFinish: () => void;
 };
 
-export const StepThree = ({ onBack, onFinish }: TStepThreeProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const profile = useSelector((state: RootState) => state.profile);
+export const StepThree = ({
+  accountData,
+  stepTwoData,
+  onBack,
+  onFinish
+}: TStepThreeProps) => {
   const skillCategories = useSelector(
     (state: RootState) => state.skills.skills
   );
   const [images, setImages] = useState<string[]>([]);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const profile = useSelector((state: RootState) => state.profile);
 
   const {
     register,
@@ -105,34 +129,48 @@ export const StepThree = ({ onBack, onFinish }: TStepThreeProps) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit = (data: TStepThreeFormValues) => {
-    dispatch(
-      setProfile({
-        ...profile,
-        canTeach: [
-          {
-            id: Date.now(),
-            name: data.skillName,
-            category: getCategorySlugById(Number(data.categoryId)),
-            subcategoryId: data.subcategoryId
-              ? Number(data.subcategoryId)
-              : undefined,
-            description: data.description,
-            images
-          }
-        ]
-      })
-    );
+  const onSubmit = () => {
     setIsPreviewOpen(true);
   };
 
   const handleEdit = () => {
     setIsPreviewOpen(false);
   };
+  const handleConfirm = async () => {
+    const formData = watch();
+    if (!accountData) return;
+    const authResult = await dispatch(
+      registerThunk({
+        email: accountData.email,
+        password: accountData.password
+      })
+    );
 
-  const handleConfirm = () => {
-    setIsPreviewOpen(false);
-    onFinish();
+    if (registerThunk.fulfilled.match(authResult)) {
+      const finalPayload = {
+        ...profile,
+        email: accountData.email,
+        cardId: profile.cardId ?? null,
+        ...stepTwoData,
+        canTeach: [
+          {
+            id: Date.now(),
+            name: formData.skillName,
+            category: getCategorySlugById(Number(formData.categoryId)),
+            subcategoryId: formData.subcategoryId
+              ? Number(formData.subcategoryId)
+              : undefined,
+            description: formData.description,
+            images
+          }
+        ]
+      };
+
+      dispatch(setProfile(finalPayload));
+
+      setIsPreviewOpen(false);
+      onFinish();
+    }
   };
 
   return (
@@ -185,6 +223,7 @@ export const StepThree = ({ onBack, onFinish }: TStepThreeProps) => {
                 value={field.value}
                 options={subcategoryOptions}
                 onChange={field.onChange}
+                disabled={!selectedCategoryId}
               />
             )}
           />

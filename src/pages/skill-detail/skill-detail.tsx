@@ -27,6 +27,7 @@ export const SkillDetailPage = () => {
   const favoriteIds = useSelector((state: RootState) => state.favorites.ids);
   const [activeImage, setActiveImage] = useState(0);
   const profile = useSelector((state: RootState) => state.profile);
+  const token = useSelector((state: RootState) => state.auth.token);
   const requests = useSelector((state: RootState) => state.request.items);
   const authEmail = useSelector((state: RootState) => state.auth.user?.email);
 
@@ -48,8 +49,7 @@ export const SkillDetailPage = () => {
 
   const handleProposeExchange = () => {
     if (profile.cardId === null || profile.cardId === undefined) {
-      alert('Напиши id карточки в профиле');
-      navigate('/profile');
+      alert('Напиши id карточки в профиле если нет профиля то зарегистрируйся');
       return;
     }
 
@@ -116,7 +116,7 @@ export const SkillDetailPage = () => {
         onNextImage={() =>
           setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1))
         }
-        onToggleFavorite={(id) => dispatch(toggleFavorite(id))}
+        onToggleFavorite={(id) => token && dispatch(toggleFavorite(id))}
         onSimilarCardClick={(id) => navigate(`/skill/${id}`)}
         onProposeExchange={handleProposeExchange}
         isRequestSent={isRequestSent}

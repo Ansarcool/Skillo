@@ -9,4 +9,5 @@ export type TSelectProps = {
   value: string;
   options: TOption[];
   onChange: (value: string) => void;
+  disabled?: boolean;
 };

@@ -46,7 +46,7 @@ p {
     gap: 15px;
     align-items: center;
     text-decoration: none;
-    color: #253017;
+    color: var(--color-text-main);
     border-radius: 12px;
     padding: 12px;
     background-color: var(--color-bg-card);
@@ -141,8 +141,7 @@ p {
     background-color: #ffffff;
     padding: 12px 20px;
     cursor: pointer;
-    font-family: var(--font-roboto), sans-serif;
-    font-size: 16px;
+    color: black;
 }
 
 .oauthButton img {
@@ -184,8 +183,7 @@ p {
     padding: 12px 20px;
     border: 1px solid #eaeaea;
     border-radius: 8px;
-    font-family: var(--font-roboto);
-    font-size: 16px;
+    color: black;
     box-sizing: border-box;
 }
 
@@ -348,25 +346,15 @@ p {
     height: 48px;
     flex: 1;
     background-color: var(--color-accent, #8bc34a);
-    color: #ffffff;
+    color: var(--color-text-main);
+    margin-top: 32px;
     border: none;
     border-radius: 8px;
     padding: 12px;
     cursor: pointer;
     font-size: 16px;
 }
-.continueButton {
-    width: 100%;
-    height: 48px;
-    flex: 1;
-    background-color: var(--color-accent, #8bc34a);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    cursor: pointer;
-    font-size: 16px;
-}
+
 .textarea {
     padding: 12px 14px;
     border: 1px solid #eaeaea;

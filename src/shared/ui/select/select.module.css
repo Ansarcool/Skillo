@@ -2,7 +2,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-
     width: 100%;
 }
 
@@ -102,6 +101,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(37, 48, 23, 0.08);
     z-index: 10;
+    overflow: hidden;
     max-height: 240px;
     overflow-y: auto;
     list-style: none;

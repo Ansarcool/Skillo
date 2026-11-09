@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerThunk } from '../../../slices/authSlice.ts';
 import type { AppDispatch, RootState } from '../../../services/store.ts';
 import { registerSchema, type TRegisterFormValues } from '../schema.ts';
 import googleIcon from '../../../../public/icons/google.svg';
@@ -10,16 +9,19 @@ import appleIcon from '../../../../public/icons/apple.svg';
 import eyeIcon from '../../../../public/icons/eye.svg';
 import styles from './step-one.module.css';
 import { Button } from '../../../shared/ui/button';
+import { clearAuthError } from '../../../slices/authSlice.ts';
 
 type TStepOneProps = {
-  onSuccess: () => void;
+  onSuccess: (data: TRegisterFormValues) => void;
 };
 
 export const StepOne = ({ onSuccess }: TStepOneProps) => {
-  const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(clearAuthError());
+  }, [dispatch]);
   const {
     register,
     handleSubmit,
@@ -27,12 +29,8 @@ export const StepOne = ({ onSuccess }: TStepOneProps) => {
   } = useForm<TRegisterFormValues>({
     resolver: yupResolver(registerSchema)
   });
-
   const onSubmit = async (data: TRegisterFormValues) => {
-    const result = await dispatch(registerThunk(data));
-    if (registerThunk.fulfilled.match(result)) {
-      onSuccess();
-    }
+    onSuccess(data);
   };
 
   return (

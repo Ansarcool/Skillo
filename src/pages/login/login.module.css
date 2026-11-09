@@ -1,0 +1,242 @@
+p {
+    margin: 0;
+}
+
+.page {
+    min-height: 100vh;
+    background-color: var(--color-bg-main, #f9faf7);
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    width: 100%;
+    max-width: 1440px;
+    height: 84px;
+    box-sizing: border-box;
+    padding: 36px 36px 0 36px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.inner {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+}
+
+.closeButton {
+    width: 147px;
+    max-width: 147px;
+    height: 48px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    border-radius: 12px;
+    padding: 12px;
+    background-color: var(--color-bg-card);
+}
+
+.stepsIndicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 32px;
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 0 20px 40px;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 556px;
+    height: 692px;
+    background-color: var(--color-bg-card);
+    border-radius: 16px;
+    padding: 60px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.oauthButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.oauthButton {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    background-color: #ffffff;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: black;
+}
+
+.oauthButton img {
+    width: 24px;
+    height: 24px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 24px 0;
+    color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #eaeaea;
+}
+
+.divider span {
+    padding: 0 12px;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    color: black;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-accent, #8bc34a);
+}
+
+.inputError {
+    border-color: #bf3920;
+}
+
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.eyeButton {
+    position: absolute;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.eyeButton img {
+    width: 24px;
+    height: 24px;
+}
+
+.error {
+    color: #bf3920;
+    font-size: 13px;
+    margin: 0;
+}
+
+.continueButton {
+    width: 100%;
+    height: 48px;
+    flex: 1;
+    background-color: var(--color-accent, #8bc34a);
+    color: var(--color-text-main);
+    margin-top: 32px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.registerLink {
+    text-align: center;
+    color: var(--color-accent, #8bc34a);
+    text-decoration: none;
+    margin-top: 12px;
+}
+
+.welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 40px;
+}
+
+.welcomeIcon {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.texts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+@media (max-width: 900px) {
+    .card:last-child {
+        display: none;
+    }
+}

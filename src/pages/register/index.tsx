@@ -10,8 +10,24 @@ import personIcon from '../../../public/icons/user-info.svg';
 import easelIcon from '../../../public/icons/school-board.svg';
 import styles from './register.module.css';
 import crossIcon from '../../../public/icons/cross.svg';
+import type { TRegisterFormValues } from './schema.ts';
 
 const TOTAL_STEPS = 3;
+
+type TStepTwoData = {
+  name: string;
+  avatar: string | null;
+  birthDate: string;
+  gender: 'any' | 'male' | 'female';
+  city: string;
+  wantsToLearn: {
+    id: number;
+    category: any;
+    subcategoryId: any;
+    name: any;
+    description: string;
+  }[];
+};
 
 const welcomeContent = {
   1: {
@@ -35,10 +51,22 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [accountData, setAccountData] = useState<TRegisterFormValues | null>(
+    null
+  );
+  const [stepTwoData, setStepTwoData] = useState<TStepTwoData | null>(null);
 
   const current = welcomeContent[step];
 
-  const handleBack = () => setStep(2);
+  const handleStepOneSuccess = (data: TRegisterFormValues) => {
+    setAccountData(data);
+    setStep(2);
+  };
+
+  const handleStepTwoNext = (data: TStepTwoData) => {
+    setStepTwoData(data);
+    setStep(3);
+  };
 
   const handleFinish = () => {
     setIsSuccessModalOpen(true);
@@ -79,12 +107,19 @@ export const RegisterPage = () => {
 
       <div className={styles.content}>
         <div className={`${styles.card} ${styles[`cardStep${step}`]}`}>
-          {step === 1 && <StepOne onSuccess={() => setStep(2)} />}
+          {step === 1 && <StepOne onSuccess={handleStepOneSuccess} />}
+
           {step === 2 && (
-            <StepTwo onBack={() => setStep(1)} onNext={() => setStep(3)} />
+            <StepTwo onBack={() => setStep(1)} onNext={handleStepTwoNext} />
           )}
-          {step === 3 && (
-            <StepThree onBack={handleBack} onFinish={handleFinish} />
+
+          {step === 3 && stepTwoData && (
+            <StepThree
+              stepTwoData={stepTwoData}
+              accountData={accountData}
+              onBack={() => setStep(2)}
+              onFinish={handleFinish}
+            />
           )}
         </div>
 

@@ -11,7 +11,7 @@ import bulbIcon from '../../../public/icons/light-bulb.svg';
 import googleIcon from '../../../public/icons/google.svg';
 import appleIcon from '../../../public/icons/apple.svg';
 import eyeIcon from '../../../public/icons/eye.svg';
-import styles from '../register/register.module.css';
+import styles from './login.module.css';
 import { Button } from '../../shared/ui/button';
 import closeIcon from '../../../public/icons/cross.svg';
 
@@ -72,59 +72,61 @@ export const LoginPage = () => {
               </button>
             </div>
             <div className={styles.divider}>
-              <span className='caption'>или</span>
+              <span className='body'>или</span>
             </div>
 
-            <label className={styles.field}>
-              <span className='body'>Email</span>
-              <input
-                type='email'
-                placeholder='Введите email'
-                {...register('email')}
-                className={`body ${styles.input} ${
-                  errors.email || error ? styles.inputError : ''
-                }`}
-              />
-              {errors.email && (
-                <p className={`caption ${styles.error}`}>
-                  {errors.email.message}
-                </p>
-              )}
-            </label>
-
-            <label className={styles.field}>
-              <span className='body'>Пароль</span>
-              <div className={styles.passwordWrapper}>
+            <div className={styles.fields}>
+              <label className={styles.field}>
+                <span className='body'>Email</span>
                 <input
-                  type={isPasswordVisible ? 'text' : 'password'}
-                  placeholder='Введите ваш пароль'
-                  {...register('password')}
+                  type='email'
+                  placeholder='Введите email'
+                  {...register('email')}
                   className={`body ${styles.input} ${
-                    errors.password || error ? styles.inputError : ''
+                    errors.email || error ? styles.inputError : ''
                   }`}
                 />
-                <button
-                  type='button'
-                  className={styles.eyeButton}
-                  onClick={() => setIsPasswordVisible((prev) => !prev)}
-                  aria-label='Показать пароль'
-                >
-                  <img src={eyeIcon} alt='' />
-                </button>
-              </div>
-              {errors.password && (
-                <p className={`caption ${styles.error}`}>
-                  {errors.password.message}
-                </p>
-              )}
-            </label>
+                {errors.email && (
+                  <p className={`caption ${styles.error}`}>
+                    {errors.email.message}
+                  </p>
+                )}
+              </label>
+
+              <label className={styles.field}>
+                <span className='body'>Пароль</span>
+                <div className={styles.passwordWrapper}>
+                  <input
+                    type={isPasswordVisible ? 'text' : 'password'}
+                    placeholder='Введите ваш пароль'
+                    {...register('password')}
+                    className={`body ${styles.input} ${
+                      errors.password || error ? styles.inputError : ''
+                    }`}
+                  />
+                  <button
+                    type='button'
+                    className={styles.eyeButton}
+                    onClick={() => setIsPasswordVisible((prev) => !prev)}
+                    aria-label='Показать пароль'
+                  >
+                    <img src={eyeIcon} alt='' />
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className={`caption ${styles.error}`}>
+                    {errors.password.message}
+                  </p>
+                )}
+              </label>
+            </div>
 
             {error && <p className={`caption ${styles.error}`}>{error}</p>}
 
             <Button
               type='primary'
               htmlType={'submit'}
-              className={`body`}
+              className={`body ${styles.continueButton}`}
               disabled={!isValid}
             >
               {loading ? 'Загрузка...' : 'Войти'}
@@ -139,10 +141,12 @@ export const LoginPage = () => {
         <div className={styles.card}>
           <div className={styles.welcome}>
             <img src={bulbIcon} alt='' className={styles.welcomeIcon} />
-            <h2 className='h2'>С возвращением в Skillo!</h2>
-            <p className='body'>
-              Обменивайтесь знаниями и навыками с другими людьми
-            </p>
+            <div className={styles.texts}>
+              <h2 className='h2'>С возвращением в Skillo!</h2>
+              <p className='body'>
+                Обменивайтесь знаниями и навыками с другими людьми
+              </p>
+            </div>
           </div>
         </div>
       </div>

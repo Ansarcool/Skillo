@@ -467,7 +467,7 @@
       }
     ],
     "wantsToLearn": [
-      { "id": 60, "name": "Подготовка к экзаменам (IELTS, TOEFL)", "category": "languages" },
+      { "id": 60, "name": "Подготовка к экзаменам", "category": "languages" },
       { "id": 61, "name": "Публичные выступления", "category": "business" },
       { "id": 62, "name": "Декор и DIY", "category": "home" }
     ],
@@ -809,7 +809,7 @@
       }
     ],
     "wantsToLearn": [
-      { "id": 107, "name": "Подготовка к экзаменам (IELTS, TOEFL)", "category": "languages" },
+      { "id": 107, "name": "Подготовка к экзаменам", "category": "languages" },
       { "id": 108, "name": "Скорочтение", "category": "education" }
     ],
     "likesCount": 117

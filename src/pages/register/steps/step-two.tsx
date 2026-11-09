@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setProfile } from '../../../slices/profileSlice.ts';
 import { getSkillsThunk } from '../../../slices/skillsSlice.ts';
 import type { AppDispatch, RootState } from '../../../services/store.ts';
 import { stepTwoSchema, type TStepTwoFormValues } from '../step-two-schema.ts';
@@ -16,7 +15,21 @@ import guestIcon from '../../../../public/icons/nonAvatar.png';
 
 type TStepTwoProps = {
   onBack: () => void;
-  onNext: () => void;
+  onNext: (stepTwoData: {
+    name: string;
+    avatar: string | null;
+    birthDate: string;
+    gender: 'any' | 'male' | 'female';
+    city: string;
+    wantsToLearn: {
+      id: number;
+      category:
+        'business' | 'creative' | 'languages' | 'education' | 'home' | 'health';
+      subcategoryId: any;
+      name: any;
+      description: string;
+    }[];
+  }) => void;
 };
 
 const cities = ['Лондон', 'Хельсинки', 'Будапешт', 'Таллин', 'Роттердам'].map(
@@ -34,7 +47,6 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
   const skillCategories = useSelector(
     (state: RootState) => state.skills.skills
   );
-  const profile = useSelector((state: RootState) => state.profile);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(guestIcon);
 
   useEffect(() => {
@@ -90,27 +102,23 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
       (skill) => String(skill.id) === data.subcategoryId
     );
 
-    dispatch(
-      setProfile({
-        ...profile,
-        cardId: profile.cardId ?? null,
-        name: data.name,
-        avatar: avatarPreview,
-        birthDate: data.birthDate,
-        gender: data.gender,
-        city: data.city,
-        wantsToLearn: [
-          {
-            id: profile.wantsToLearn?.[0]?.id ?? Date.now(),
-            category: getCategorySlugById(Number(data.categoryId)),
-            subcategoryId: selectedSubcategory?.id,
-            name: selectedSubcategory ? selectedSubcategory.name : '',
-            description: ''
-          }
-        ]
-      })
-    );
-    onNext();
+    const stepTwoData = {
+      name: data.name,
+      avatar: avatarPreview,
+      birthDate: data.birthDate,
+      gender: data.gender,
+      city: data.city,
+      wantsToLearn: [
+        {
+          id: Date.now(),
+          category: getCategorySlugById(Number(data.categoryId)),
+          subcategoryId: selectedSubcategory?.id,
+          name: selectedSubcategory ? selectedSubcategory.name : '',
+          description: ''
+        }
+      ]
+    };
+    onNext(stepTwoData);
   };
 
   return (
@@ -236,6 +244,7 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
               value={field.value}
               options={subcategoryOptions}
               onChange={field.onChange}
+              disabled={!selectedCategoryId}
             />
           )}
         />

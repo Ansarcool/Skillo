@@ -17,10 +17,22 @@
     align-items: flex-start;
     gap: 6px;
     color: black;
+    min-width: 0;
+    flex: 1;
 }
+
 .name {
     color: black;
+    word-break: break-word;
 }
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
 .status {
     padding: 4px 10px;
     border-radius: 12px;
@@ -52,4 +64,23 @@
 .done {
     background-color: #e2e3e5;
     color: #383d41;
+}
+
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actions button {
+        width: 100%;
+    }
 }

@@ -56,11 +56,7 @@ export const SkillCardsContainer = ({
     ? buildProfileCard(profile, authEmail ?? '')
     : null;
 
-  const allCardsWithMine = myProfileCard
-    ? [myProfileCard, ...skillCards]
-    : skillCards;
-
-  const sortParam = searchParams.get('sort') as TSortMode;
+  const sortParam = searchParams.get('sort');
   const sortMode: TSortMode =
     sortParam === 'popular' || sortParam === 'newest' ? sortParam : 'newest';
   const isMatchMode = searchParams.get('match') === '1';
@@ -97,8 +93,8 @@ export const SkillCardsContainer = ({
 
   const baseCards =
     isMatchMode && myProfileCard
-      ? matchSkillCards(allCardsWithMine, myProfileCard)
-      : allCardsWithMine;
+      ? matchSkillCards(skillCards, myProfileCard)
+      : skillCards;
 
   const filteredCards = filterSkillCards(baseCards, filters);
 
@@ -126,7 +122,7 @@ export const SkillCardsContainer = ({
       city={card.city}
       age={card.age}
       isFavorite={favoriteIds.includes(card.id)}
-      onToggleFavorite={() => dispatch(toggleFavorite(card.id))}
+      onToggleFavorite={() => token && dispatch(toggleFavorite(card.id))}
       onDetailsClick={() => navigate(`/skill/${card.id}`)}
       canTeach={card.canTeach}
       wantsToLearn={card.wantsToLearn}
