@@ -3,15 +3,16 @@ import {
   createSlice,
   type PayloadAction
 } from '@reduxjs/toolkit';
-import { getFavorites } from '../api/api.ts';
+import { getFavorites, type TCardId } from '../api/api.ts';
 
-export const getFavoritesThunk = createAsyncThunk<number[]>(
+export const getFavoritesThunk = createAsyncThunk<TCardId[]>(
   'faviorites/getFavorites',
   () => getFavorites()
 );
+
 export type TFavoritesState = {
   isLoading: boolean;
-  ids: number[];
+  ids: TCardId[];
   error?: string | null;
 };
 
@@ -24,7 +25,7 @@ export const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
   reducers: {
-    toggleFavorite: (state, action: PayloadAction<number>) => {
+    toggleFavorite: (state, action: PayloadAction<TCardId>) => {
       const id = action.payload;
       if (state.ids.includes(id)) {
         state.ids = state.ids.filter((favId) => favId !== id);

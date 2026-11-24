@@ -36,7 +36,7 @@ export const FiltersDrawer = () => {
         </div>
 
         <div className={styles.panelContent}>
-          <FiltersSidebar hideTitle />
+          <FiltersSidebar hideTitle={false} />
         </div>
       </div>
     </>

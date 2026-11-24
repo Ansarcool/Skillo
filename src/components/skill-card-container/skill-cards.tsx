@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getSkillCardsThunk } from '../../slices/skillsSlice.ts';
 import { toggleFavorite } from '../../slices/favoritesSlice.ts';
+import { getProfileThunk } from '../../slices/profileSlice.ts';
 import type { RootState, AppDispatch } from '../../services/store.ts';
-import type { TSkillCard } from '../../api/api.ts';
+import type { TCardId, TSkillCard } from '../../api/api.ts';
 import { SkillCardUI } from '../../shared/ui/skillCard';
 import { SkillCardsSection } from '../../shared/ui/silly-components/skill-cards-section';
 import { PaginationUI } from '../../shared/ui/pagination/pagination.tsx';
@@ -38,7 +39,7 @@ export const SkillCardsContainer = ({
   const [searchParams] = useSearchParams();
 
   const {
-    skillCards = [],
+    skillCards: allSkillCards = [],
     isLoading,
     error
   } = useSelector((state: RootState) => state.skills);
@@ -50,8 +51,15 @@ export const SkillCardsContainer = ({
   const profile = useSelector((state: RootState) => state.profile);
   const token = useSelector((state: RootState) => state.auth.token);
   const authEmail = useSelector((state: RootState) => state.auth.user?.email);
+  const authUserId = useSelector((state: RootState) => state.auth.user?.id);
 
   const isAuthenticated = Boolean(token);
+  const myId: TCardId | null = profile.cardId ?? authUserId ?? null;
+
+  const skillCards = myId
+    ? allSkillCards.filter((card) => String(card.id) !== String(myId))
+    : allSkillCards;
+
   const myProfileCard = isAuthenticated
     ? buildProfileCard(profile, authEmail ?? '')
     : null;
@@ -64,19 +72,26 @@ export const SkillCardsContainer = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    if (skillCards.length === 0) {
+    if (allSkillCards.length === 0) {
       dispatch(getSkillCardsThunk());
     }
-  }, [skillCards.length, dispatch]);
+  }, [allSkillCards.length, dispatch]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [filters, sortMode]);
+
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(getRequestsThunk());
     }
   }, [isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated && !profile.cardId) {
+      dispatch(getProfileThunk());
+    }
+  }, [isAuthenticated, profile.cardId, dispatch]);
 
   if (isLoading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка: {error}</p>;
@@ -84,7 +99,7 @@ export const SkillCardsContainer = ({
   const isFiltering = hasActiveFilters(filters);
   const showFullGrid = isFiltering || forceShowAll;
 
-  const isCardRequestSent = (cardId: number) => {
+  const isCardRequestSent = (cardId: TCardId) => {
     if (!profile?.cardId || !Array.isArray(requests)) return false;
     return requests.some(
       (r) => r.fromUserId === profile.cardId && r.toUserId === cardId

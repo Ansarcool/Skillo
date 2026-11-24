@@ -1,4 +1,4 @@
-export const CARDS_PER_PAGE = 20;
+export const CARDS_PER_PAGE = 18;
 
 export const paginate = <T>(items: T[], page: number): T[] => {
   const start = (page - 1) * CARDS_PER_PAGE;

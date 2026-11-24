@@ -6,6 +6,7 @@ import { getSkillsThunk } from '../../../slices/skillsSlice.ts';
 import type { AppDispatch, RootState } from '../../../services/store.ts';
 import { stepTwoSchema, type TStepTwoFormValues } from '../step-two-schema.ts';
 import { Select } from '../../../shared/ui/select/select.tsx';
+import { MultiSelect } from '../../../shared/ui/multiselect';
 import { SearchSelect } from '../../../shared/ui/search-select/search-select.tsx';
 import { DatePicker } from '../../../shared/ui/date';
 import styles from './step-two.module.css';
@@ -60,16 +61,18 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
     handleSubmit,
     watch,
     control,
+    setValue,
     formState: { errors, isValid }
   } = useForm<TStepTwoFormValues>({
     resolver: yupResolver(stepTwoSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       birthDate: '',
       gender: 'any',
       city: '',
       categoryId: '',
-      subcategoryId: ''
+      subcategoryIds: []
     }
   });
 
@@ -98,27 +101,30 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
   };
 
   const onSubmit = (data: TStepTwoFormValues) => {
-    const selectedSubcategory = selectedCategory?.skills.find(
-      (skill) => String(skill.id) === data.subcategoryId
-    );
+    const categorySlug = getCategorySlugById(Number(data.categoryId));
 
-    const stepTwoData = {
+    const wantsToLearn = data.subcategoryIds.map((subId, index) => {
+      const subcategory = selectedCategory?.skills.find(
+        (skill) => String(skill.id) === subId
+      );
+
+      return {
+        id: Date.now() + index,
+        category: categorySlug,
+        subcategoryId: subcategory?.id,
+        name: subcategory ? subcategory.name : '',
+        description: ''
+      };
+    });
+
+    onNext({
       name: data.name,
       avatar: avatarPreview,
       birthDate: data.birthDate,
       gender: data.gender,
       city: data.city,
-      wantsToLearn: [
-        {
-          id: Date.now(),
-          category: getCategorySlugById(Number(data.categoryId)),
-          subcategoryId: selectedSubcategory?.id,
-          name: selectedSubcategory ? selectedSubcategory.name : '',
-          description: ''
-        }
-      ]
-    };
-    onNext(stepTwoData);
+      wantsToLearn
+    });
   };
 
   return (
@@ -222,7 +228,10 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
               placeholder='Выберите категорию'
               value={field.value}
               options={categoryOptions}
-              onChange={field.onChange}
+              onChange={(value) => {
+                field.onChange(value);
+                setValue('subcategoryIds', [], { shouldValidate: true });
+              }}
             />
           )}
         />
@@ -236,21 +245,21 @@ export const StepTwo = ({ onBack, onNext }: TStepTwoProps) => {
       <div className={styles.field}>
         <Controller
           control={control}
-          name='subcategoryId'
+          name='subcategoryIds'
           render={({ field }) => (
-            <Select
-              label='Подкатегория навыка, которому хотите научиться'
-              placeholder='Выберите подкатегорию'
-              value={field.value}
+            <MultiSelect
+              label='Подкатегории, которым хотите научиться'
+              placeholder='Выберите подкатегории'
+              value={field.value ?? []}
               options={subcategoryOptions}
               onChange={field.onChange}
               disabled={!selectedCategoryId}
             />
           )}
         />
-        {errors.subcategoryId && (
+        {errors.subcategoryIds && (
           <p className={`caption ${styles.error}`}>
-            {errors.subcategoryId.message}
+            {errors.subcategoryIds.message}
           </p>
         )}
       </div>

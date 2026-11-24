@@ -8,8 +8,9 @@ import {
   stepThreeSchema,
   type TStepThreeFormValues
 } from '../step-three-chema.ts';
-import type { TRegisterFormValues } from '../schema.ts'; // 👈 Добавили импорт типа
+import type { TRegisterFormValues } from '../schema.ts';
 import { Select } from '../../../shared/ui/select/select.tsx';
+import { MultiSelect } from '../../../shared/ui/multiselect';
 import { Modal } from '../../../shared/ui/modal/modal.tsx';
 import { SkillProposalPreview } from '../skill-propsal-preview';
 import imageIcon from '../../../../public/icons/gallery-add.svg';
@@ -17,6 +18,7 @@ import styles from './step-three.module.css';
 import { Button } from '../../../shared/ui/button';
 import { getCategorySlugById } from '../../../shared/lib/category-labels.ts';
 import { registerThunk } from '../../../slices/authSlice.ts';
+import { uploadSkillImages, updateProfile } from '../../../api/api.ts';
 
 type TStepTwoData = {
   name: string;
@@ -24,13 +26,7 @@ type TStepTwoData = {
   birthDate: string;
   gender: 'any' | 'male' | 'female';
   city: string;
-  wantsToLearn: {
-    id: number;
-    category: any;
-    subcategoryId: any;
-    name: any;
-    description: string;
-  }[];
+  wantsToLearn: any[];
 };
 
 type TStepThreeProps = {
@@ -39,6 +35,10 @@ type TStepThreeProps = {
   onBack: () => void;
   onFinish: () => void;
 };
+
+type TImageItem = { file: File; preview: string };
+
+const MAX_IMAGES = 6;
 
 export const StepThree = ({
   accountData,
@@ -49,8 +49,10 @@ export const StepThree = ({
   const skillCategories = useSelector(
     (state: RootState) => state.skills.skills
   );
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<TImageItem[]>([]);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const profile = useSelector((state: RootState) => state.profile);
 
@@ -59,6 +61,7 @@ export const StepThree = ({
     handleSubmit,
     watch,
     control,
+    setValue,
     formState: { errors, isValid }
   } = useForm<TStepThreeFormValues>({
     resolver: yupResolver(stepThreeSchema),
@@ -66,13 +69,13 @@ export const StepThree = ({
     defaultValues: {
       skillName: '',
       categoryId: '',
-      subcategoryId: '',
+      subcategoryIds: [],
       description: ''
     }
   });
 
   const selectedCategoryId = watch('categoryId');
-  const selectedSubcategoryId = watch('subcategoryId');
+  const selectedSubcategoryIds = watch('subcategoryIds') ?? [];
   const skillName = watch('skillName');
   const description = watch('description');
 
@@ -80,9 +83,11 @@ export const StepThree = ({
     (cat) => String(cat.id) === selectedCategoryId
   );
 
-  const selectedSubcategory = selectedCategory?.skills.find(
-    (skill) => String(skill.id) === selectedSubcategoryId
-  );
+  const selectedSubcategoryNames =
+    selectedCategory?.skills
+      .filter((skill) => selectedSubcategoryIds.includes(String(skill.id)))
+      .map((skill) => skill.name)
+      .join(', ') ?? '';
 
   const categoryOptions = skillCategories.map((cat) => ({
     value: String(cat.id),
@@ -95,81 +100,110 @@ export const StepThree = ({
       label: skill.name
     })) ?? [];
 
-  const MAX_IMAGES = 6;
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    setImages((prev) => {
-      const availableSlots = MAX_IMAGES - prev.length;
-      if (availableSlots <= 0) return prev;
+    const availableSlots = MAX_IMAGES - images.length;
+    const newItems = Array.from(files)
+      .slice(0, Math.max(availableSlots, 0))
+      .map((file) => ({ file, preview: URL.createObjectURL(file) }));
 
-      const filesToAdd = Array.from(files).slice(0, availableSlots);
-
-      filesToAdd.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setImages((current) =>
-            current.length < MAX_IMAGES
-              ? [...current, reader.result as string]
-              : current
-          );
-        };
-        reader.readAsDataURL(file);
-      });
-
-      return prev;
-    });
-
+    setImages((prev) => [...prev, ...newItems]);
     e.target.value = '';
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages((prev) => {
+      URL.revokeObjectURL(prev[index].preview);
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const onSubmit = () => {
+    setSubmitError(null);
     setIsPreviewOpen(true);
   };
 
   const handleEdit = () => {
     setIsPreviewOpen(false);
   };
-  const handleConfirm = async () => {
+
+  const buildCanTeach = (imageUrls: string[]) => {
     const formData = watch();
-    if (!accountData) return;
-    const authResult = await dispatch(
-      registerThunk({
-        email: accountData.email,
-        password: accountData.password
-      })
-    );
+    const categorySlug = getCategorySlugById(Number(formData.categoryId));
 
-    if (registerThunk.fulfilled.match(authResult)) {
-      const finalPayload = {
-        ...profile,
-        email: accountData.email,
-        cardId: profile.cardId ?? null,
-        ...stepTwoData,
-        canTeach: [
-          {
-            id: Date.now(),
-            name: formData.skillName,
-            category: getCategorySlugById(Number(formData.categoryId)),
-            subcategoryId: formData.subcategoryId
-              ? Number(formData.subcategoryId)
-              : undefined,
-            description: formData.description,
-            images
-          }
-        ]
-      };
+    return formData.subcategoryIds.map((subId, index) => ({
+      id: Date.now() + index,
+      name: formData.skillName,
+      category: categorySlug,
+      subcategoryId: Number(subId),
+      description: formData.description,
+      images: imageUrls
+    }));
+  };
 
-      dispatch(setProfile(finalPayload));
+  const handleConfirm = async () => {
+    if (!accountData || isSubmitting) return;
 
+    setSubmitError(null);
+    const formData = watch();
+    setIsSubmitting(true);
+
+    try {
+      const authResult = await dispatch(
+        registerThunk({
+          email: accountData.email,
+          password: accountData.password,
+          name: stepTwoData.name,
+          avatar: stepTwoData.avatar,
+          birthDate: stepTwoData.birthDate,
+          gender: stepTwoData.gender,
+          city: stepTwoData.city,
+          categoryId: formData.categoryId,
+          subcategoryId: formData.subcategoryIds[0] ?? '',
+          canTeach: buildCanTeach([]),
+          wantsToLearn: stepTwoData.wantsToLearn
+        })
+      );
+
+      if (!registerThunk.fulfilled.match(authResult)) {
+        const message = authResult.error?.message || 'Ошибка регистрации';
+        console.error('Ошибка регистрации:', message);
+        setSubmitError(message);
+        setIsPreviewOpen(false);
+        return;
+      }
+
+      let canTeach = buildCanTeach([]);
+
+      if (images.length > 0) {
+        const urls = await uploadSkillImages(images.map((i) => i.file));
+        canTeach = buildCanTeach(urls);
+        await updateProfile({ canTeach }, authResult.payload.token);
+      }
+
+      dispatch(
+        setProfile({
+          ...profile,
+          cardId: authResult.payload.user.id ?? null,
+          ...stepTwoData,
+          categoryId: formData.categoryId,
+          subcategoryId: formData.subcategoryIds[0] ?? '',
+          canTeach
+        })
+      );
+
+      images.forEach((i) => URL.revokeObjectURL(i.preview));
       setIsPreviewOpen(false);
       onFinish();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Ошибка регистрации';
+      console.error('Ошибка регистрации:', err);
+      setSubmitError(message);
+      setIsPreviewOpen(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -199,9 +233,12 @@ export const StepThree = ({
               <Select
                 label='Категория навыка'
                 placeholder='Выберите категорию навыка'
-                value={field.value}
                 options={categoryOptions}
-                onChange={field.onChange}
+                value={field.value}
+                onChange={(value) => {
+                  field.onChange(value);
+                  setValue('subcategoryIds', [], { shouldValidate: true });
+                }}
               />
             )}
           />
@@ -215,21 +252,21 @@ export const StepThree = ({
         <div className={styles.field}>
           <Controller
             control={control}
-            name='subcategoryId'
+            name='subcategoryIds'
             render={({ field }) => (
-              <Select
-                label='Подкатегория навыка'
-                placeholder='Выберите подкатегорию навыка'
-                value={field.value}
+              <MultiSelect
+                label='Подкатегории навыка'
+                placeholder='Выберите подкатегории'
                 options={subcategoryOptions}
+                value={field.value ?? []}
                 onChange={field.onChange}
                 disabled={!selectedCategoryId}
               />
             )}
           />
-          {errors.subcategoryId && (
+          {errors.subcategoryIds && (
             <p className={`caption ${styles.error}`}>
-              {errors.subcategoryId.message}
+              {errors.subcategoryIds.message}
             </p>
           )}
         </div>
@@ -251,9 +288,9 @@ export const StepThree = ({
 
         {images.length > 0 && (
           <div className={styles.imageGrid}>
-            {images.map((src, index) => (
-              <div key={index} className={styles.imageGridItem}>
-                <img src={src} alt='' />
+            {images.map((item, index) => (
+              <div key={item.preview} className={styles.imageGridItem}>
+                <img src={item.preview} alt='' />
                 <button
                   type='button'
                   className={styles.imageRemoveButton}
@@ -286,19 +323,23 @@ export const StepThree = ({
           </label>
         )}
 
+        {submitError && (
+          <p className={`caption ${styles.error}`}>{submitError}</p>
+        )}
+
         <div className={styles.actions}>
           <Button
-            type='secondary'
-            htmlType='button'
             className='body'
+            htmlType='button'
+            type='secondary'
             onClick={onBack}
           >
             Назад
           </Button>
           <Button
-            type='primary'
-            htmlType='submit'
             className='body'
+            htmlType='submit'
+            type='primary'
             disabled={!isValid}
           >
             Продолжить
@@ -309,11 +350,11 @@ export const StepThree = ({
       {isPreviewOpen && (
         <Modal onClose={handleEdit}>
           <SkillProposalPreview
-            skillName={skillName}
             category={selectedCategory?.category}
-            subcategory={selectedSubcategory?.name}
+            subcategory={selectedSubcategoryNames}
+            skillName={skillName}
             description={description}
-            images={images}
+            images={images.map((i) => i.preview)}
             onEdit={handleEdit}
             onDone={handleConfirm}
           />

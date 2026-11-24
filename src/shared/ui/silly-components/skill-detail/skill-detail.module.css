@@ -117,7 +117,7 @@
 
 .exchangeButton {
     align-self: flex-start;
-    background-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
     color: #ffffff;
     border: none;
     border-radius: 8px;

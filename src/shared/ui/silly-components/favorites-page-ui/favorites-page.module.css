@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--color-bg-main, #F9FAF7);
+    background-color: var(--color-bg-main);
     box-sizing: border-box;
 }
 
@@ -22,7 +22,7 @@
     background-color: var(--color-bg-card);
     border-radius: 16px;
     padding: 40px;
-    border: 1px solid var(--color-toggle, #B2B9A9);
+    border: 1px solid var(--color-toggle);
     width: 324px;
     box-sizing: border-box;
     flex-shrink: 0;
@@ -46,7 +46,7 @@
 }
 
 .sideItem:hover {
-    background-color: var(--color-button-hover, #DEEBC5);
+    background-color: var(--color-button-hover);
 }
 
 .sideItemActive {
@@ -55,8 +55,8 @@
 }
 
 .contentCard {
-    background-color: var(--color-bg-card, #FFFFFF);
-    border: 1px solid var(--color-toggle, #B2B9A9);
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-toggle);
     border-radius: 16px;
     padding: 40px;
     box-sizing: border-box;

@@ -11,9 +11,11 @@ import bulbIcon from '../../../public/icons/light-bulb.svg';
 import googleIcon from '../../../public/icons/google.svg';
 import appleIcon from '../../../public/icons/apple.svg';
 import eyeIcon from '../../../public/icons/eye.svg';
+import eyeSlashIcon from '../../../public/icons/eye-slash.svg';
 import styles from './login.module.css';
 import { Button } from '../../shared/ui/button';
 import closeIcon from '../../../public/icons/cross.svg';
+import { getProfileThunk } from '../../slices/profileSlice.ts';
 
 export const LoginPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +35,7 @@ export const LoginPage = () => {
   const onSubmit = async (data: TLoginFormValues) => {
     const result = await dispatch(loginThunk(data));
     if (loginThunk.fulfilled.match(result)) {
+      await dispatch(getProfileThunk());
       navigate('/');
     }
   };
@@ -110,7 +113,10 @@ export const LoginPage = () => {
                     onClick={() => setIsPasswordVisible((prev) => !prev)}
                     aria-label='Показать пароль'
                   >
-                    <img src={eyeIcon} alt='' />
+                    <img
+                      src={isPasswordVisible ? eyeSlashIcon : eyeIcon}
+                      alt=''
+                    />
                   </button>
                 </div>
                 {errors.password && (

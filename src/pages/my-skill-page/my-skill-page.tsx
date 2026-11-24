@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setProfile, getProfileThunk } from '../../slices/profileSlice.ts';
+import {
+  getProfileThunk,
+  updateProfileThunk
+} from '../../slices/profileSlice.ts';
 import type { AppDispatch, RootState } from '../../services/store.ts';
 import {
   stepThreeSchema,
@@ -32,12 +35,26 @@ export const MySkillsPage = () => {
     dispatch(getProfileThunk());
   }, [dispatch]);
 
-  const existingSkill = profile.canTeach?.[0];
+  const canTeach = profile.canTeach ?? [];
+  const existingSkill = canTeach[0];
+
+  const groupSkills = existingSkill
+    ? canTeach.filter(
+        (skill) =>
+          skill.name === existingSkill.name &&
+          skill.category === existingSkill.category
+      )
+    : [];
+
   const legacyCategoryId = (existingSkill as any)?.categoryId;
   const existingCategoryId = existingSkill?.category
     ? getCategoryIdBySlug(existingSkill.category)
     : (legacyCategoryId ?? null);
-  const existingSubcategoryId = existingSkill?.subcategoryId ?? null;
+  const existingSubcategoryIds = groupSkills
+    .map((skill) => skill.subcategoryId)
+    .filter((id): id is number => id !== undefined && id !== null)
+    .map(String);
+  const existingSubcategoryKey = existingSubcategoryIds.join(',');
 
   const {
     register,
@@ -45,6 +62,7 @@ export const MySkillsPage = () => {
     watch,
     control,
     reset,
+    setValue,
     formState: { errors, isValid, isDirty }
   } = useForm<TStepThreeFormValues>({
     resolver: yupResolver(stepThreeSchema),
@@ -52,7 +70,7 @@ export const MySkillsPage = () => {
     defaultValues: {
       skillName: existingSkill?.name ?? '',
       categoryId: existingCategoryId ? String(existingCategoryId) : '',
-      subcategoryId: existingSubcategoryId ? String(existingSubcategoryId) : '',
+      subcategoryIds: existingSubcategoryIds,
       description: existingSkill?.description ?? ''
     }
   });
@@ -62,31 +80,50 @@ export const MySkillsPage = () => {
       reset({
         skillName: existingSkill.name ?? '',
         categoryId: existingCategoryId ? String(existingCategoryId) : '',
-        subcategoryId: existingSubcategoryId
-          ? String(existingSubcategoryId)
-          : '',
+        subcategoryIds: existingSubcategoryIds,
         description: existingSkill.description ?? ''
       });
     }
   }, [
     existingSkill?.name,
     existingSkill?.category,
-    existingSkill?.subcategoryId,
+    existingSubcategoryKey,
     legacyCategoryId,
     existingSkill?.description
   ]);
 
   const selectedCategoryId = watch('categoryId');
-  const selectedSubcategoryId = watch('subcategoryId');
+  const selectedSubcategoryIds = watch('subcategoryIds') ?? [];
+  const selectedSubcategoryKey = selectedSubcategoryIds.join(',');
 
   const selectedCategory = skillCategories.find(
     (cat) => String(cat.id) === selectedCategoryId
   );
 
-  const selectedSubcategory = selectedCategory?.skills.find(
-    (skill: { id: number; name: string }) =>
-      String(skill.id) === selectedSubcategoryId
-  );
+  useEffect(() => {
+    if (!selectedCategory) return;
+
+    const valid = selectedSubcategoryIds.filter((id) =>
+      selectedCategory.skills.some(
+        (skill: { id: number }) => String(skill.id) === id
+      )
+    );
+
+    if (valid.length !== selectedSubcategoryIds.length) {
+      setValue('subcategoryIds', valid, {
+        shouldValidate: true,
+        shouldDirty: true
+      });
+    }
+  }, [selectedCategory, selectedSubcategoryKey]);
+
+  const selectedSubcategoryLabels =
+    selectedCategory?.skills
+      .filter((skill: { id: number }) =>
+        selectedSubcategoryIds.includes(String(skill.id))
+      )
+      .map((skill: { name: string }) => skill.name)
+      .join(', ') ?? '';
 
   const categoryOptions = skillCategories.map((cat) => ({
     value: String(cat.id),
@@ -100,22 +137,22 @@ export const MySkillsPage = () => {
     })) ?? [];
 
   const onSubmit = (data: TStepThreeFormValues) => {
+    const categorySlug = getCategorySlugById(Number(data.categoryId));
+    const groupIds = new Set(groupSkills.map((skill) => skill.id));
+    const otherSkills = canTeach.filter((skill) => !groupIds.has(skill.id));
+    const images = existingSkill?.images ?? [];
+
+    const updatedGroup = data.subcategoryIds.map((subId, index) => ({
+      id: groupSkills[index]?.id ?? Date.now() + index,
+      name: data.skillName,
+      category: categorySlug,
+      subcategoryId: Number(subId),
+      description: data.description,
+      images
+    }));
+
     dispatch(
-      setProfile({
-        ...profile,
-        canTeach: [
-          {
-            id: existingSkill?.id ?? Date.now(),
-            name: data.skillName,
-            category: getCategorySlugById(Number(data.categoryId)),
-            subcategoryId: data.subcategoryId
-              ? Number(data.subcategoryId)
-              : undefined,
-            description: data.description,
-            images: existingSkill?.images ?? []
-          }
-        ]
-      })
+      updateProfileThunk({ canTeach: [...updatedGroup, ...otherSkills] })
     );
   };
 
@@ -129,7 +166,7 @@ export const MySkillsPage = () => {
       categoryOptions={categoryOptions}
       subcategoryOptions={subcategoryOptions}
       selectedCategoryLabel={selectedCategory?.category}
-      selectedSubcategoryLabel={selectedSubcategory?.name}
+      selectedSubcategoryLabel={selectedSubcategoryLabels}
       onSubmit={handleSubmit(onSubmit)}
     />
   );

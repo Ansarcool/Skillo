@@ -48,7 +48,7 @@ p{
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: var(--color-sec-button, #E2EBD3);
+  background-color: var(--color-sec-button);
   flex-shrink: 0;
 }
 
@@ -81,14 +81,24 @@ p{
 }
 .tags {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
+  min-width: 0;
 }
 
 .tag {
-  padding: 8px 12px 8px 12px;
+  padding: 8px 12px;
   border-radius: 20px;
   color: black;
+  min-width: 0;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag:last-child:not(:first-child) {
+  flex-shrink: 0;
 }
 
 .resultsHeader {

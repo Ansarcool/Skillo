@@ -13,7 +13,7 @@
 .reset {
     background: none;
     border: none;
-    color: var(--color-accent, #8bc34a);
+    color: var(--color-accent);
     cursor: pointer;
     display: flex;
     align-items: center;

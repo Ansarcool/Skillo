@@ -19,7 +19,7 @@ export const PaginationUI: FC<TPaginationProps> = ({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        ← Назад
+        Назад
       </button>
 
       <div className={styles.pages}>
@@ -43,7 +43,7 @@ export const PaginationUI: FC<TPaginationProps> = ({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Вперёд →
+        Вперёд
       </button>
     </nav>
   );

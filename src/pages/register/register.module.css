@@ -2,8 +2,9 @@ p {
     margin: 0;
 }
 .page {
-    min-height: 100vh;
-    background-color: var(--color-bg-main, #f9faf7);
+    height: 1024px;
+    max-height: 100%;
+    background-color: var(--color-bg-main);
     display: flex;
     flex-direction: column;
 }
@@ -75,7 +76,7 @@ p {
 }
 
 .stepActive {
-    background-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
 }
 
 .content {
@@ -189,7 +190,7 @@ p {
 
 .input:focus {
     outline: none;
-    border-color: var(--color-accent, #8bc34a);
+    border-color: var(--color-accent);
 }
 
 .passwordWrapper {
@@ -223,7 +224,7 @@ p {
     margin: 0;
 }
 .submitButton {
-    background-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -304,7 +305,7 @@ p {
     right: -2px;
     width: 20px;
     height: 20px;
-    background-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
     color: #ffffff;
     border-radius: 50%;
     display: flex;
@@ -345,7 +346,7 @@ p {
     width: 100%;
     height: 48px;
     flex: 1;
-    background-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
     color: var(--color-text-main);
     margin-top: 32px;
     border: none;
@@ -367,7 +368,7 @@ p {
 
 .textarea:focus {
     outline: none;
-    border-color: var(--color-accent, #8bc34a);
+    border-color: var(--color-accent);
 }
 
 .imageUpload {
@@ -388,7 +389,7 @@ p {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: var(--color-accent, #8bc34a);
+    color: var(--color-accent);
 }
 
 .imageUploadLink img {
@@ -405,7 +406,7 @@ p {
 
 .registerLink {
     text-align: center;
-    color: var(--color-accent, #8bc34a);
+    color: var(--color-accent);
     text-decoration: none;
     margin-top: 4px;
 }

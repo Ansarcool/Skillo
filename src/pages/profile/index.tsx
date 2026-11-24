@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ import cameraIcon from '../../../public/icons/gallery-edit.svg';
 import editIcon from '../../../public/icons/edit.svg';
 import guestIcon from '../../../public/icons/nonAvatar.png';
 import styles from './profile.module.css';
+import { supabase } from '../../api/api.ts';
 
 const CITIES = [
   { label: 'Лондон', value: 'Лондон' },
@@ -46,15 +47,15 @@ export const ProfilePage = () => {
   const profile = useSelector((state: RootState) => state.profile);
   const { isLoading, error } = useSelector((state: RootState) => state.profile);
 
-  const authDbStr = localStorage.getItem('skillo_auth_mock_db');
-  const authDb = authDbStr ? JSON.parse(authDbStr) : null;
-  const userEmail = authDb?.user?.email ?? '';
+  const authEmail = useSelector((state: RootState) => state.auth.user?.email);
+  const [userEmail, setUserEmail] = useState(authEmail ?? '');
 
   const {
     register,
     handleSubmit,
     control,
     reset,
+    setValue,
     formState: { errors }
   } = useForm<TProfileFormValues>({
     resolver: yupResolver(profileSchema),
@@ -67,6 +68,20 @@ export const ProfilePage = () => {
       bio: ''
     }
   });
+
+  useEffect(() => {
+    if (authEmail) {
+      setUserEmail(authEmail);
+      return;
+    }
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? '');
+    });
+  }, [authEmail]);
+
+  useEffect(() => {
+    setValue('email', userEmail);
+  }, [userEmail, setValue]);
 
   useEffect(() => {
     dispatch(getProfileThunk());

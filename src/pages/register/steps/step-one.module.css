@@ -22,8 +22,9 @@ p {
 .input {
     width: 100%;
     padding: 12px 20px;
-    border: 1px solid #eaeaea;
+    border: 1px solid #69735D;
     border-radius: 8px;
+    color: black;
     font-family: var(--font-roboto), sans-serif;
     font-size: 16px;
     box-sizing: border-box;
@@ -31,7 +32,7 @@ p {
 
 .input:focus {
     outline: none;
-    border-color: var(--color-accent, #8bc34a);
+    border-color: var(--color-accent);
 }
 
 .passwordWrapper {
@@ -67,7 +68,8 @@ p {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    border: 1px solid #eaeaea;
+    color: black;
+    border: 1px solid #69735D;
     border-radius: 8px;
     background-color: #ffffff;
     padding: 12px 20px;

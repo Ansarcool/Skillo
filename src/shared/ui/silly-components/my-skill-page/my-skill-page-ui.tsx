@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import type { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { Select } from '../../select/select.tsx';
+import { MultiSelect } from '../../multiselect';
 import { Button } from '../../button';
 import type { TStepThreeFormValues } from '../../../../pages/register/step-three-chema.ts';
 import styles from './my-skill-page.module.css';
@@ -129,20 +130,21 @@ export const MySkillsPageUI: FC<TMySkillsPageUIProps> = ({
           <div className={styles.field}>
             <Controller
               control={control}
-              name='subcategoryId'
+              name='subcategoryIds'
               render={({ field }) => (
-                <Select
-                  label='Подкатегория навыка'
-                  placeholder='Выберите подкатегорию навыка'
-                  value={field.value}
+                <MultiSelect
+                  label='Подкатегории навыка'
+                  placeholder='Выберите подкатегории'
+                  value={field.value ?? []}
                   options={subcategoryOptions}
                   onChange={field.onChange}
+                  disabled={subcategoryOptions.length === 0}
                 />
               )}
             />
-            {errors.subcategoryId && (
+            {errors.subcategoryIds && (
               <p className={`caption ${styles.error}`}>
-                {errors.subcategoryId.message}
+                {errors.subcategoryIds.message}
               </p>
             )}
           </div>

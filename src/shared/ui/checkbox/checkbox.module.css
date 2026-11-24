@@ -27,8 +27,8 @@
 }
 
 .checkboxInput:checked + .checkboxCustom {
-    background-color: var(--color-accent, #8bc34a);
-    border-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 .checkboxInput:checked + .checkboxCustom::after {
@@ -44,8 +44,8 @@
 }
 
 .checkboxInput:indeterminate + .checkboxCustom {
-    background-color: var(--color-accent, #8bc34a);
-    border-color: var(--color-accent, #8bc34a);
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
 }
 
 .checkboxInput:indeterminate + .checkboxCustom::after {

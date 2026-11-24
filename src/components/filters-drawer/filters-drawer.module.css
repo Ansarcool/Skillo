@@ -38,7 +38,7 @@
     left: auto;
     width: 300px;
     max-width: 100vw;
-    background-color: var(--color-bg-main, #f9faf7);
+    background-color: var(--color-bg-main);
     transform: translateX(100%);
     transition: transform 0.25s ease;
     z-index: 100;

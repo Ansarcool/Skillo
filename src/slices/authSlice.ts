@@ -2,20 +2,18 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   getUser,
   login,
+  logout as logoutRequest,
   register,
+  type TAuthResponse,
+  type TRegisterFullPayload,
   type TRegisterUser,
   type TUser
 } from '../api/api.ts';
 
-type TAuthResponse = {
-  user: TUser;
-  token: string;
-};
-
-export const registerThunk = createAsyncThunk<TAuthResponse, TRegisterUser>(
-  'auth/register',
-  async (registerData) => await register(registerData)
-);
+export const registerThunk = createAsyncThunk<
+  TAuthResponse,
+  TRegisterFullPayload
+>('auth/register', async (registerData) => await register(registerData));
 
 export const loginThunk = createAsyncThunk<TAuthResponse, TRegisterUser>(
   'auth/login',
@@ -25,6 +23,13 @@ export const loginThunk = createAsyncThunk<TAuthResponse, TRegisterUser>(
 export const getUserThunk = createAsyncThunk<TUser, string>(
   'auth/user',
   async (token) => await getUser(token)
+);
+
+export const logoutThunk = createAsyncThunk<void, void>(
+  'auth/logout',
+  async () => {
+    await logoutRequest();
+  }
 );
 
 type AuthState = {
@@ -106,6 +111,13 @@ export const authSlice = createSlice({
         state.user = null;
         state.error =
           action.error.message || 'Не удалось получить данные пользователя';
+      })
+
+      .addCase(logoutThunk.fulfilled, (state) => {
+        localStorage.removeItem('accessToken');
+        state.user = undefined;
+        state.token = undefined;
+        state.error = undefined;
       });
   }
 });

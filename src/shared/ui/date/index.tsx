@@ -21,7 +21,8 @@ const MONTHS = [
 
 const parseDate = (value: string): Date | null => {
   if (!value) return null;
-  const parsed = new Date(value);
+  const [y, m, d] = value.split('-').map(Number);
+  const parsed = new Date(y, m - 1, d);
   return isNaN(parsed.getTime()) ? null : parsed;
 };
 
@@ -55,6 +56,12 @@ export const DatePicker: FC<TDatePickerProps> = ({
 
   const selectedDate = parseDate(value);
   const today = new Date();
+  const todayStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const isFuture = (date: Date) => date.getTime() > todayStart.getTime();
 
   const [viewYear, setViewYear] = useState(
     selectedDate?.getFullYear() ?? today.getFullYear()
@@ -126,7 +133,7 @@ export const DatePicker: FC<TDatePickerProps> = ({
   };
 
   const handleConfirm = () => {
-    if (tempSelected) {
+    if (tempSelected && !isFuture(tempSelected)) {
       onChange(formatValue(tempSelected));
     }
     setIsOpen(false);
@@ -135,6 +142,13 @@ export const DatePicker: FC<TDatePickerProps> = ({
   const handleCancel = () => {
     setTempSelected(selectedDate);
     setIsOpen(false);
+  };
+
+  const handleYearChange = (year: number) => {
+    setViewYear(year);
+    if (year === today.getFullYear() && viewMonth > today.getMonth()) {
+      setViewMonth(today.getMonth());
+    }
   };
 
   return (
@@ -165,7 +179,13 @@ export const DatePicker: FC<TDatePickerProps> = ({
               onChange={(e) => setViewMonth(Number(e.target.value))}
             >
               {MONTHS.map((month, index) => (
-                <option key={month} value={index}>
+                <option
+                  key={month}
+                  value={index}
+                  disabled={
+                    viewYear === today.getFullYear() && index > today.getMonth()
+                  }
+                >
                   {month}
                 </option>
               ))}
@@ -174,7 +194,7 @@ export const DatePicker: FC<TDatePickerProps> = ({
             <select
               className={`body ${styles.yearSelect}`}
               value={viewYear}
-              onChange={(e) => setViewYear(Number(e.target.value))}
+              onChange={(e) => handleYearChange(Number(e.target.value))}
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -196,14 +216,18 @@ export const DatePicker: FC<TDatePickerProps> = ({
             {cells.map((cell, index) => {
               const isSelected =
                 tempSelected && isSameDay(cell.date, tempSelected);
+              const isDisabled = isFuture(cell.date);
 
               return (
                 <button
                   key={index}
                   type='button'
+                  disabled={isDisabled}
                   className={`body ${styles.day} ${
                     !cell.isCurrentMonth ? styles.dayMuted : ''
-                  } ${isSelected ? styles.daySelected : ''}`}
+                  } ${isSelected ? styles.daySelected : ''} ${
+                    isDisabled ? styles.dayDisabled : ''
+                  }`}
                   onClick={() => setTempSelected(cell.date)}
                 >
                   {cell.day}

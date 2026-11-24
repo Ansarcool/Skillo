@@ -19,7 +19,7 @@ p {
 .textarea {
     width: 100%;
     padding: 12px 20px;
-    border: 1px solid #eaeaea;
+    border: 1px solid #69735D;
     border-radius: 8px;
     font-family: var(--font-roboto), sans-serif;
     font-size: 16px;
@@ -35,7 +35,7 @@ p {
 .input:focus,
 .textarea:focus {
     outline: none;
-    border-color: var(--color-accent, #8bc34a);
+    border-color: var(--color-accent);
 }
 
 .error {
@@ -62,7 +62,7 @@ p {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: var(--color-accent, #8bc34a);
+    color: var(--color-accent);
 }
 
 .imageUploadLink img {

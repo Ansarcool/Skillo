@@ -467,7 +467,7 @@
       }
     ],
     "wantsToLearn": [
-      { "id": 60, "name": "Подготовка к экзаменам", "category": "languages" },
+      { "id": 60, "name": "Подготовка к экзаменам (IElTS, TOEFL)", "category": "languages" },
       { "id": 61, "name": "Публичные выступления", "category": "business" },
       { "id": 62, "name": "Декор и DIY", "category": "home" }
     ],
@@ -809,7 +809,7 @@
       }
     ],
     "wantsToLearn": [
-      { "id": 107, "name": "Подготовка к экзаменам", "category": "languages" },
+      { "id": 107, "name": "Подготовка к экзаменам (IElTS, TOEFL)", "category": "languages" },
       { "id": 108, "name": "Скорочтение", "category": "education" }
     ],
     "likesCount": 117
@@ -959,28 +959,5 @@
       { "id": 128, "name": "Скорочтение", "category": "education" }
     ],
     "likesCount": 197
-  },
-  {
-    "id": 41,
-    "name": "Жадыра",
-    "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUBn-nmWJ9XPrngEc4uOEKx2yOp26cPE-9VYfytN7zEE2ETxYxBK7kOY8&s=10",
-    "city": "Астана",
-    "age": 42,
-    "gender": "female",
-    "bio": "Хочу изучать турецкий, плавать и играть на гитаре.",
-    "createdAt": "2026-08-19T13:00:00Z",
-    "canTeach": [
-      {
-        "id": 126,
-        "name": "Творчество и искусство",
-        "category": "creative",
-        "description": " Умею шить и вышивать"
-      }
-    ],
-    "wantsToLearn": [
-      { "id": 127, "name": "Турецкий", "category": "languages" },
-      { "id": 128, "name": "Плавать", "category": "health" }
-    ],
-    "likesCount": 197
   }
-]
+  ]

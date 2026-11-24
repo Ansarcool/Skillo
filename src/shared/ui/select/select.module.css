@@ -16,7 +16,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    border: 1px solid var(--color-toggle, #B2B9A9);
+    border: 1px solid var(--color-toggle);
     border-radius: 12px;
     background-color: #FFFFFF;
     cursor: pointer;
@@ -36,7 +36,7 @@
 }
 
 .trigger.open {
-    border-color: var(--color-button-pressed, #508826);
+    border-color: var(--color-button-pressed);
 }
 
 .input {
@@ -97,7 +97,7 @@
     left: 0;
     right: 0;
     background-color: #FFFFFF;
-    border: 1px solid var(--color-toggle, #B2B9A9);
+    border: 1px solid var(--color-toggle);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(37, 48, 23, 0.08);
     z-index: 10;
@@ -127,12 +127,12 @@
 }
 
 .option:hover {
-    background-color: var(--color-bg-disabled, #DEEBC5);
+    background-color: var(--color-bg-disabled);
     color: var(--color-text-main);
 }
 
 .option:focus-visible {
-    background-color: var(--color-button-hover, #DEEBC5);
+    background-color: var(--color-button-hover);
     outline: none;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .selected:hover {
-    background-color: var(--color-button-hover, #DEEBC5);
+    background-color: var(--color-button-hover);
 }
 
 .noResults {

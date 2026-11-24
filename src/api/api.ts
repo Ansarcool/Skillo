@@ -1,13 +1,17 @@
 import type { TSkillCategory } from '../slices/skillsSlice.ts';
 import type { TSkillTag } from '../shared/ui/skillCard';
+import { createClient } from '@supabase/supabase-js';
 import type {
   TRequest,
   TRequestStatus
 } from '../entites/request/model/types.ts';
 import type { TSeenStatuses } from '../slices/requestStatusWatcherSlice.ts';
 import { BadgeId } from '../entites/badge/model/types.ts';
+
+export type TCardId = string | number;
+
 export type TSkillCard = {
-  id: number;
+  id: TCardId;
   name: string;
   avatar: string;
   city: string;
@@ -29,7 +33,7 @@ export type TProfileState = {
   description?: string;
   categoryId: string;
   subcategoryId: string;
-  cardId: number | null;
+  cardId: TCardId | null;
   canTeach: TSkillTag[] | null;
   wantsToLearn: TSkillTag[] | null;
 };
@@ -48,28 +52,25 @@ export const emptyProfile: TProfileState = {
   wantsToLearn: []
 };
 
-export const getSkills = (): Promise<TSkillCategory[]> =>
-  fetch('/db/skills.json').then((response) => {
-    if (!response.ok) {
-      throw new Error('Не удалось загрузить навыки');
-    }
-    return response.json();
-  });
-
-export const getSkillCards = (): Promise<TSkillCard[]> =>
-  fetch('/db/skill-cards.json').then((res) => {
-    if (!res.ok) {
-      throw new Error('Не удалось загрузить карточки');
-    }
-    return res.json();
-  });
-
 export type TRegisterUser = {
   email: string;
   password: string;
 };
 
+export type TRegisterFullPayload = TRegisterUser & {
+  name: string;
+  avatar: string | null;
+  birthDate: string;
+  gender: 'any' | 'male' | 'female';
+  city: string;
+  categoryId: string;
+  subcategoryId: string;
+  canTeach: TSkillTag[];
+  wantsToLearn: TSkillTag[];
+};
+
 export type TUser = {
+  id?: string;
   email: string;
   name?: string;
   city?: string;
@@ -80,82 +81,309 @@ export type TAuthResponse = {
   user: TUser;
 };
 
-const AUTH_MOCK_STORAGE_KEY = 'skillo_auth_mock_db';
-const delay = (ms = 500) => new Promise((res) => setTimeout(res, ms));
-
-export function register(registerData: TRegisterUser): Promise<TAuthResponse> {
-  return delay().then(() => {
-    if (!registerData.email || registerData.password.length < 6) {
-      throw new Error('Некорректный email или пароль (минимум 6 символов)');
-    }
-
-    const authData: TAuthResponse = {
-      token: 'token123',
-      user: { email: registerData.email }
-    };
-    localStorage.setItem(AUTH_MOCK_STORAGE_KEY, JSON.stringify(authData));
-
-    return authData;
-  });
-}
-export function login(loginData: TRegisterUser): Promise<TAuthResponse> {
-  return delay().then(() => {
-    const saved = localStorage.getItem(AUTH_MOCK_STORAGE_KEY);
-    const parsed: TAuthResponse | null = saved ? JSON.parse(saved) : null;
-
-    if (!parsed || parsed.user.email !== loginData.email) {
-      throw new Error('Пользователь с таким email не найден');
-    }
-
-    if (!loginData.password || loginData.password.length < 8) {
-      throw new Error('Неверный пароль');
-    }
-
-    return parsed;
-  });
-}
-
-export function getUser(token: string): Promise<TUser> {
-  return delay().then(() => {
-    if (!token) {
-      throw new Error('Токен отсутствует');
-    }
-
-    const saved = localStorage.getItem(AUTH_MOCK_STORAGE_KEY);
-    const parsed: TAuthResponse = saved ? JSON.parse(saved) : null;
-
-    if (!parsed || parsed.token !== token) {
-      throw new Error('Недействительный токен');
-    }
-
-    return parsed.user;
-  });
-}
 export type TUpdateProfileData = Partial<TProfileState>;
 
-export function updateProfile(
+export type TCreateRequestData = {
+  skillId: number;
+  skillName: string;
+  fromUserId: TCardId;
+  toUserId: TCardId;
+  toUserName: string;
+};
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export const getSkills = (): Promise<TSkillCategory[]> =>
+  fetch('/db/skills.json').then((response) => {
+    if (!response.ok) {
+      throw new Error('Не удалось загрузить навыки');
+    }
+    return response.json();
+  });
+
+const calcAge = (birthDate?: string | null): number => {
+  if (!birthDate) return 18;
+  const birth = new Date(birthDate);
+  const now = new Date();
+  let age = now.getFullYear() - birth.getFullYear();
+  const hadBirthday =
+    now.getMonth() > birth.getMonth() ||
+    (now.getMonth() === birth.getMonth() && now.getDate() >= birth.getDate());
+  if (!hadBirthday) age -= 1;
+  return age;
+};
+
+export const getSkillCards = async (): Promise<TSkillCard[]> => {
+  const { data: profiles, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  let dbCards: TSkillCard[] = [];
+
+  if (!error && profiles) {
+    dbCards = profiles.map((profile) => ({
+      id: profile.id,
+      name: profile.name || 'Аноним',
+      avatar: profile.avatar_url || 'https://via.placeholder.com/150',
+      city: profile.city || 'Не указан',
+      age: calcAge(profile.birth_date),
+      gender: profile.gender === 'female' ? 'female' : 'male',
+      bio: profile.description || '',
+      createdAt: profile.created_at,
+      likesCount: 0,
+      canTeach: profile.can_teach || [],
+      wantsToLearn: profile.wants_to_learn || []
+    }));
+  }
+
+  try {
+    const response = await fetch('/db/skill-cards.json');
+    if (response.ok) {
+      const mockCards = await response.json();
+      return [...dbCards, ...mockCards];
+    }
+  } catch {
+    return dbCards;
+  }
+
+  return dbCards;
+};
+
+export async function register(
+  registerData: TRegisterFullPayload
+): Promise<TAuthResponse> {
+  const { data: authData, error: authError } = await supabase.auth.signUp({
+    email: registerData.email,
+    password: registerData.password
+  });
+
+  if (authError || !authData.user) {
+    switch (authError?.code) {
+      case 'user_already_exists':
+        throw new Error('Пользователь с таким email уже зарегистрирован');
+      case 'weak_password':
+        throw new Error('Пароль слишком простой');
+      case 'over_email_send_rate_limit':
+        throw new Error('Слишком много попыток, попробуйте позже');
+      default:
+        throw new Error('Ошибка регистрации');
+    }
+  }
+
+  const userId = authData.user.id;
+
+  const { error: profileError } = await supabase.from('profiles').insert({
+    id: userId,
+    email: registerData.email,
+    name: registerData.name,
+    avatar_url: registerData.avatar,
+    birth_date: registerData.birthDate || null,
+    gender: registerData.gender,
+    city: registerData.city,
+    category_id: registerData.categoryId,
+    subcategory_id: registerData.subcategoryId,
+    can_teach: registerData.canTeach,
+    wants_to_learn: registerData.wantsToLearn
+  });
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  const sessionToken = authData.session?.access_token || 'supabase_token';
+
+  return {
+    token: sessionToken,
+    user: {
+      id: userId,
+      email: registerData.email,
+      name: registerData.name,
+      city: registerData.city
+    }
+  };
+}
+
+export async function login(loginData: TRegisterUser): Promise<TAuthResponse> {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: loginData.email,
+    password: loginData.password
+  });
+
+  if (error || !data.session) {
+    switch (error?.code) {
+      case 'invalid_credentials':
+        throw new Error('Неверный email или пароль');
+      case 'email_not_confirmed':
+        throw new Error('Подтвердите email, мы отправили вам письмо');
+      case 'over_request_rate_limit':
+        throw new Error('Слишком много попыток, попробуйте позже');
+      default:
+        throw new Error('Не удалось войти, попробуйте ещё раз');
+    }
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', data.user.id)
+    .maybeSingle();
+
+  return {
+    token: data.session.access_token,
+    user: {
+      id: data.user.id,
+      email: data.user.email || loginData.email,
+      name: profile?.name,
+      city: profile?.city
+    }
+  };
+}
+
+export async function checkEmailExists(email: string): Promise<boolean> {
+  const { data, error } = await supabase.rpc('email_exists', {
+    check_email: email
+  });
+
+  if (error) throw new Error(error.message);
+  return Boolean(data);
+}
+
+export async function logout(): Promise<void> {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw new Error(error.message);
+}
+
+export async function getUser(token: string): Promise<TUser> {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser(token);
+
+  if (error || !user) {
+    throw new Error('Недействительный токен или сессия истекла');
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  return {
+    id: user.id,
+    email: user.email || '',
+    name: profile?.name,
+    city: profile?.city
+  };
+}
+
+const mapProfileRow = (data: any): TProfileState => ({
+  name: data.name || '',
+  avatar: data.avatar_url ?? null,
+  birthDate: data.birth_date || '',
+  gender: data.gender || 'any',
+  city: data.city || '',
+  description: data.description || '',
+  categoryId: data.category_id || '',
+  subcategoryId: data.subcategory_id || '',
+  cardId: data.id,
+  canTeach: data.can_teach || [],
+  wantsToLearn: data.wants_to_learn || []
+});
+
+export async function getProfile(): Promise<TProfileState> {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) return emptyProfile;
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (error || !data) return emptyProfile;
+
+  return mapProfileRow(data);
+}
+
+export async function updateProfile(
   profileData: TUpdateProfileData,
   token: string
 ): Promise<TProfileState> {
-  return delay().then(() => {
-    if (!token) {
-      throw new Error('Токен отсутствует');
-    }
+  const {
+    data: { user }
+  } = await supabase.auth.getUser(token);
 
-    const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
-    const currentProfile: TProfileState = savedProfile
-      ? JSON.parse(savedProfile)
-      : emptyProfile;
+  if (!user) {
+    throw new Error('Пользователь не авторизован');
+  }
 
-    const updatedProfile: TProfileState = {
-      ...currentProfile,
-      ...profileData
-    };
+  const dbPayload: Record<string, unknown> = {};
+  if (profileData.name !== undefined) dbPayload.name = profileData.name;
+  if (profileData.avatar !== undefined)
+    dbPayload.avatar_url = profileData.avatar;
+  if (profileData.birthDate !== undefined)
+    dbPayload.birth_date = profileData.birthDate || null;
+  if (profileData.gender !== undefined) dbPayload.gender = profileData.gender;
+  if (profileData.city !== undefined) dbPayload.city = profileData.city;
+  if (profileData.description !== undefined)
+    dbPayload.description = profileData.description;
+  if (profileData.categoryId !== undefined)
+    dbPayload.category_id = profileData.categoryId;
+  if (profileData.subcategoryId !== undefined)
+    dbPayload.subcategory_id = profileData.subcategoryId;
+  if (profileData.canTeach !== undefined)
+    dbPayload.can_teach = profileData.canTeach;
+  if (profileData.wantsToLearn !== undefined)
+    dbPayload.wants_to_learn = profileData.wantsToLearn;
 
-    localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(updatedProfile));
+  const { data, error } = await supabase
+    .from('profiles')
+    .update(dbPayload)
+    .eq('id', user.id)
+    .select()
+    .maybeSingle();
 
-    return updatedProfile;
-  });
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error('Профиль не найден или нет прав на его обновление');
+  }
+
+  return mapProfileRow(data);
+}
+
+export async function uploadSkillImages(files: File[]): Promise<string[]> {
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error('Пользователь не авторизован');
+
+  return Promise.all(
+    files.map(async (file) => {
+      const ext = file.name.split('.').pop() || 'jpg';
+      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+
+      const { error } = await supabase.storage
+        .from('skill-images')
+        .upload(path, file, { contentType: file.type });
+
+      if (error) throw new Error(error.message);
+
+      return supabase.storage.from('skill-images').getPublicUrl(path).data
+        .publicUrl;
+    })
+  );
 }
 
 const REQUESTS_STORAGE_KEY = 'skillo_requests';
@@ -174,19 +402,11 @@ const writeRequests = (requests: TRequest[]) => {
 };
 
 export function getRequests(): Promise<TRequest[]> {
-  return delay().then(() => readRequests());
+  return Promise.resolve().then(() => readRequests());
 }
 
-export type TCreateRequestData = {
-  skillId: number;
-  skillName: string;
-  fromUserId: number;
-  toUserId: number;
-  toUserName: string;
-};
-
 export function createRequest(data: TCreateRequestData): Promise<TRequest> {
-  return delay().then(() => {
+  return Promise.resolve().then(() => {
     const requests = readRequests();
 
     const newRequest: TRequest = {
@@ -205,7 +425,7 @@ export function updateRequestStatus(
   id: string,
   status: TRequestStatus
 ): Promise<TRequest> {
-  return delay().then(() => {
+  return Promise.resolve().then(() => {
     const requests = readRequests();
     const index = requests.findIndex((r) => r.id === id);
 
@@ -222,20 +442,8 @@ export function updateRequestStatus(
   });
 }
 
-const PROFILE_STORAGE_KEY = 'skillo_profile';
-
-export function getProfile(): Promise<TProfileState> {
-  return delay(100).then(() => {
-    try {
-      const saved = localStorage.getItem(PROFILE_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : emptyProfile;
-    } catch {
-      return emptyProfile;
-    }
-  });
-}
 const FAVORITES_STORAGE_KEY = 'skillo_favorites';
-export const getFavorites = (): number[] => {
+export const getFavorites = (): TCardId[] => {
   try {
     const saved = localStorage.getItem(FAVORITES_STORAGE_KEY);
     return saved ? JSON.parse(saved) : [];
@@ -252,6 +460,7 @@ export const getMarksIds = (key: string): string[] => {
     return [];
   }
 };
+
 const SEEN_STATUSES_KEY = 'skillo_seen_request_statuses';
 export const getSeenStatuses = (): TSeenStatuses => {
   try {
@@ -261,6 +470,7 @@ export const getSeenStatuses = (): TSeenStatuses => {
     return {};
   }
 };
+
 const UNLOCKED_STORAGE_KEY = 'skillo_unlocked_badges';
 export const getUnlocked = (): BadgeId[] => {
   try {

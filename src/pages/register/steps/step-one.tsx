@@ -7,9 +7,11 @@ import { registerSchema, type TRegisterFormValues } from '../schema.ts';
 import googleIcon from '../../../../public/icons/google.svg';
 import appleIcon from '../../../../public/icons/apple.svg';
 import eyeIcon from '../../../../public/icons/eye.svg';
+import eyeSlashIcon from '../../../../public/icons/eye-slash.svg';
 import styles from './step-one.module.css';
 import { Button } from '../../../shared/ui/button';
 import { clearAuthError } from '../../../slices/authSlice.ts';
+import { checkEmailExists } from '../../../api/api.ts';
 
 type TStepOneProps = {
   onSuccess: (data: TRegisterFormValues) => void;
@@ -18,19 +20,40 @@ type TStepOneProps = {
 export const StepOne = ({ onSuccess }: TStepOneProps) => {
   const { loading, error } = useSelector((state: RootState) => state.auth);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     dispatch(clearAuthError());
   }, [dispatch]);
+
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isValid }
   } = useForm<TRegisterFormValues>({
-    resolver: yupResolver(registerSchema)
+    resolver: yupResolver(registerSchema),
+    mode: 'onChange'
   });
+
   const onSubmit = async (data: TRegisterFormValues) => {
-    onSuccess(data);
+    setIsChecking(true);
+    try {
+      const exists = await checkEmailExists(data.email);
+      if (exists) {
+        setError('email', {
+          type: 'manual',
+          message: 'Пользователь с таким email уже зарегистрирован'
+        });
+        return;
+      }
+      onSuccess(data);
+    } catch {
+      onSuccess(data);
+    } finally {
+      setIsChecking(false);
+    }
   };
 
   return (
@@ -77,7 +100,7 @@ export const StepOne = ({ onSuccess }: TStepOneProps) => {
               onClick={() => setIsPasswordVisible((prev) => !prev)}
               aria-label='Показать пароль'
             >
-              <img src={eyeIcon} alt='' />
+              <img src={isPasswordVisible ? eyeSlashIcon : eyeIcon} alt='' />
             </button>
           </div>
           {errors.password ? (
@@ -98,9 +121,9 @@ export const StepOne = ({ onSuccess }: TStepOneProps) => {
         type='primary'
         htmlType='submit'
         className={`body ${styles.nextButton}`}
-        disabled={!isValid}
+        disabled={!isValid || isChecking}
       >
-        {loading ? 'Загрузка...' : 'Далее'}
+        {loading || isChecking ? 'Загрузка...' : 'Далее'}
       </Button>
     </form>
   );

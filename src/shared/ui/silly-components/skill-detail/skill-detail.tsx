@@ -108,7 +108,7 @@ export const SkillDetailPageUI: FC<TSkillDetailPageUIProps> = ({
                     className={`caption ${styles.tag}`}
                     style={{ backgroundColor: 'var(--tag-plus)' }}
                   >
-                    +{card.wantsToLearn.length - 1}
+                    +{card.wantsToLearn.length - 2}
                   </span>
                 )}
               </div>

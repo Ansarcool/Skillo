@@ -6,6 +6,7 @@ import {
 import {
   getProfile,
   emptyProfile,
+  supabase,
   type TProfileState,
   type TUpdateProfileData,
   updateProfile
@@ -33,24 +34,25 @@ export const updateProfileThunk = createAsyncThunk<
   TProfileState,
   TUpdateProfileData
 >('profile/update', async (data) => {
-  const saved = localStorage.getItem('skillo_auth_mock_db');
-  const parsed = saved ? JSON.parse(saved) : null;
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
-  return await updateProfile(data, parsed?.token || '');
+  if (!session) {
+    throw new Error('Пользователь не авторизован');
+  }
+
+  return await updateProfile(data, session.access_token);
 });
 
 export const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {
-    setProfile: (state, action: PayloadAction<TProfileState>) => {
-      const updated = { ...state, ...action.payload };
-      try {
-        const { isLoading, error, ...cleanProfile } = updated;
-        localStorage.setItem('skillo_profile', JSON.stringify(cleanProfile));
-      } catch {}
-      return updated;
-    },
+    setProfile: (state, action: PayloadAction<TProfileState>) => ({
+      ...state,
+      ...action.payload
+    }),
     resetProfile: (state) => ({ ...state, ...emptyProfile })
   },
   extraReducers: (builder) => {
